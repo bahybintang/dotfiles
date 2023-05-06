@@ -5,16 +5,20 @@ shell:
     - -c
     - "tmux attach -t base || tmux new -s base"
 
-title: Terminal 
+title: Terminal
 
 font:
   normal:
-    family: JetBrainsMono Nerd Font 
+    family: JetBrainsMono Nerd Font
     style: Regular
 
 window:
   opacity: 0.8
-  startup_mode: Windowed 
+  startup_mode: Windowed
+  decorations: full
+  padding:
+    x: 5
+    y: 16
 
 cursor:
   style:
@@ -24,40 +28,91 @@ cursor:
   unfocused_hollow: true
   thickness: 0.15
 
-# Colors (Hyper)
+env:
+  TERM: xterm-256color
+
 colors:
   # Default colors
   primary:
-    background: '0x000000'
-    foreground: '0xffffff'
+    background: "#24273A" # base
+    foreground: "#CAD3F5" # text
+    # Bright and dim foreground colors
+    dim_foreground: "#CAD3F5" # text
+    bright_foreground: "#CAD3F5" # text
+
+  # Cursor colors
   cursor:
-    text: '0xF81CE5'
-    cursor: '0xffffff'
+    text: "#24273A" # base
+    cursor: "#F4DBD6" # rosewater
+  vi_mode_cursor:
+    text: "#24273A" # base
+    cursor: "#B7BDF8" # lavender
+
+  # Search colors
+  search:
+    matches:
+      foreground: "#24273A" # base
+      background: "#A5ADCB" # subtext0
+    focused_match:
+      foreground: "#24273A" # base
+      background: "#A6DA95" # green
+    footer_bar:
+      foreground: "#24273A" # base
+      background: "#A5ADCB" # subtext0
+
+  # Keyboard regex hints
+  hints:
+    start:
+      foreground: "#24273A" # base
+      background: "#EED49F" # yellow
+    end:
+      foreground: "#24273A" # base
+      background: "#A5ADCB" # subtext0
+
+  # Selection colors
+  selection:
+    text: "#24273A" # base
+    background: "#F4DBD6" # rosewater
 
   # Normal colors
   normal:
-    black:   '0x000000'
-    red:     '0xfe0100'
-    green:   '0x33ff00'
-    yellow:  '0xfeff00'
-    blue:    '0x0066ff'
-    magenta: '0xcc00ff'
-    cyan:    '0x00ffff'
-    white:   '0xd0d0d0'
+    black: "#494D64" # surface1
+    red: "#ED8796" # red
+    green: "#A6DA95" # green
+    yellow: "#EED49F" # yellow
+    blue: "#8AADF4" # blue
+    magenta: "#F5BDE6" # pink
+    cyan: "#8BD5CA" # teal
+    white: "#B8C0E0" # subtext1
 
   # Bright colors
   bright:
-    black:   '0x808080'
-    red:     '0xfe0100'
-    green:   '0x33ff00'
-    yellow:  '0xfeff00'
-    blue:    '0x0066ff'
-    magenta: '0xcc00ff'
-    cyan:    '0x00ffff'
-    white:   '0xFFFFFF'
+    black: "#5B6078" # surface2
+    red: "#ED8796" # red
+    green: "#A6DA95" # green
+    yellow: "#EED49F" # yellow
+    blue: "#8AADF4" # blue
+    magenta: "#F5BDE6" # pink
+    cyan: "#8BD5CA" # teal
+    white: "#A5ADCB" # subtext0
+
+  # Dim colors
+  dim:
+    black: "#494D64" # surface1
+    red: "#ED8796" # red
+    green: "#A6DA95" # green
+    yellow: "#EED49F" # yellow
+    blue: "#8AADF4" # blue
+    magenta: "#F5BDE6" # pink
+    cyan: "#8BD5CA" # teal
+    white: "#B8C0E0" # subtext1
+
+  indexed_colors:
+    - { index: 16, color: "#F5A97F" }
+    - { index: 17, color: "#F4DBD6" }
 
 key_bindings:
   - { key: Right, mods: Alt, chars: "\x1BF" }
-  - { key: Left,  mods: Alt, chars: "\x1BB" }
+  - { key: Left, mods: Alt, chars: "\x1BB" }
 
 draw_bold_text_with_bright_colors: true
