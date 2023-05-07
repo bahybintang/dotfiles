@@ -15,7 +15,6 @@ if [[ $TERM_PROGRAM != "WarpTerminal" ]]; then
 
   # Custom keybindings
   bindkey '^ ' autosuggest-accept
-  bindkey '^X' create_completion
   bindkey '^[^?' backward-kill-word
 fi
 
