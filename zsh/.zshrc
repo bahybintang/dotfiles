@@ -1,10 +1,3 @@
-# Plugins Variables
-# export ZSH_TMUX_AUTOSTART=false
-
-# export ZSH=$HOME/.oh-my-zsh
-# export PATH=$HOME/.config/composer/vendor/bin:$PATH
-# source $ZSH/oh-my-zsh.sh
-
 if [[ $TERM_PROGRAM != "WarpTerminal" ]]; then
   # Plugins
   plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting dirhistory kubectl zsh_codex)
@@ -37,7 +30,6 @@ source $ZSH/oh-my-zsh.sh
 
 if [[ $TERM_PROGRAM != "WarpTerminal" ]]; then
   # Set up the prompt
-
   autoload -Uz promptinit
   promptinit
   prompt adam1
@@ -71,9 +63,9 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-source $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# p10k
+source $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Custom aliases
@@ -97,8 +89,10 @@ fi
 # Kubectl
 source <(kubectl completion zsh)
 
-# GCloud SDK
-source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+if [[ $(uname) == "Darwin" ]]; then
+  # GCloud SDK
+  source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+fi
 
 export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
