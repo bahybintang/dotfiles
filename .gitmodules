@@ -1,0 +1,3 @@
+[submodule "bintang/.config/nvim"]
+	path = bintang/.config/nvim
+	url = https://github.com/NvChad/NvChad
