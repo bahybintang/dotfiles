@@ -1,6 +1,6 @@
 if [[ $TERM_PROGRAM != "WarpTerminal" ]]; then
   # Plugins
-  plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting dirhistory kubectl zsh_codex)
+  plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting dirhistory kubectl)
 
 
   # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
