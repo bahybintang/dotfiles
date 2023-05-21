@@ -10,5 +10,5 @@ stow alacritty
 stow tmux
 stow vim
 stow zsh
-stow bintang
+stow config 
 ```
