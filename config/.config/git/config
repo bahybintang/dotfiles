@@ -1,0 +1,5 @@
+[include]
+  path = config.personal
+
+[include]
+  path = work/config.work 
