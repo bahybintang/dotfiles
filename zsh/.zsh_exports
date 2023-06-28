@@ -11,6 +11,8 @@ export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda-11.2/lib64:/usr/local/cuda
 export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins
 export JAVA_HOME=/usr/lib/jvm/bellsoft-java8-full-amd64
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+export VISUAL="nvim"
+export EDITOR="$VISUAL"
 
 # PATH exports
 export PATH="$HOME/gems/bin:$PATH"

@@ -1,0 +1,18 @@
+clset() {
+	export KUBECONFIG="$HOME/.kube/$1"
+	touch $KUBECONFIG
+	aws eks update-kubeconfig --name $1
+}
+
+kdebug() {
+	kubectl debug node/$1 -it --image=ubuntu
+}
+
+_lima() {
+	port=$(limactl list --json | jq .sshLocalPort)
+	if [ -n $port ]; then
+		ssh lima@127.0.0.1 -p $port
+	else
+		echo "VM not started"
+	fi
+}
