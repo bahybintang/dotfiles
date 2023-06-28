@@ -1,5 +1,5 @@
 # Plugins
-plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting dirhistory kubectl)
+plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting zsh-fzf-history-search dirhistory kubectl)
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
