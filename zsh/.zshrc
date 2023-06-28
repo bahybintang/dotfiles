@@ -82,6 +82,11 @@ if [ -f ~/.zsh_exports ]; then
 fi
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
+# Custom completions
+if [ -f ~/.zsh_completions ]; then
+    . ~/.zsh_completions
+fi
+
 # Custom applications
 if [ -f ~/.zsh_applications ]; then
     . ~/.zsh_applications
