@@ -16,3 +16,13 @@ _lima() {
 		echo "VM not started"
 	fi
 }
+
+rebase() {
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+  git checkout master
+  git fetch --all
+  git pull
+  git checkout $current_branch
+  git rebase origin/master
+  git push -f
+}
