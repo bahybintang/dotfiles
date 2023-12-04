@@ -3,12 +3,13 @@ if [[ $(uname) == "Darwin" ]]; then
     source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 fi
 
+# GVM
+export GVM_DIR="$HOME/.gvm"
+[[ -s "$GVM_DIR/scripts/gvm" ]] && source "$GVM_DIR/scripts/gvm"
+
 # NVM
 export NVM_DIR="$HOME/.nvm"
 alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"
-
-# GVM
-[[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
