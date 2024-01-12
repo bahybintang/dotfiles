@@ -18,21 +18,13 @@ _lima() {
 }
 
 rebase() {
-  current_branch=$(git rev-parse --abbrev-ref HEAD)
-  git checkout master
   git fetch --all
-  git pull
-  git checkout $current_branch
   git rebase origin/master
   git push -f
 }
 
 rebase-main() {
-  current_branch=$(git rev-parse --abbrev-ref HEAD)
-  git checkout main
   git fetch --all
-  git pull
-  git checkout $current_branch
   git rebase origin/main
   git push -f
 }
