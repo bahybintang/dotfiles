@@ -91,3 +91,5 @@ fi
 if [ -f ~/.zsh_applications ]; then
     . ~/.zsh_applications
 fi
+
+mkdir -p $HOME/.terraform.d/plugin-cache
