@@ -29,13 +29,12 @@ _lima() {
 }
 
 rebase() {
+  if [ ! -z $1 ]; then
+    branch=$1
+  else
+    branch="master"
+  fi
   git fetch --all
-  git rebase origin/master
-  git push -f
-}
-
-rebase-main() {
-  git fetch --all
-  git rebase origin/main
+  git rebase origin/$branch
   git push -f
 }
