@@ -106,3 +106,5 @@ if [ -f ~/.zsh_applications ]; then
 fi
 
 mkdir -p $HOME/.terraform.d/plugin-cache
+
+[[ -s "/home/bintangbahy/.gvm/scripts/gvm" ]] && source "/home/bintangbahy/.gvm/scripts/gvm"
