@@ -14,7 +14,7 @@ font:
 
 window:
   opacity: 0.8
-  startup_mode: Windowed
+  startup_mode: Fullscreen 
   decorations: full
   padding:
     x: 5

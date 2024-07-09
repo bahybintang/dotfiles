@@ -55,3 +55,20 @@ rebase() {
   git rebase origin/$branch
   git push -f
 }
+
+generate_aws_exports() {
+  if [ -z "$1" ]; then
+    PROFILE="default"
+  else
+    PROFILE=$1
+  fi
+
+  awk -v profile="$PROFILE" '
+  /^\[/{f=0} 
+  /^\[/{if ($1 == "[" profile "]") f=1} 
+  f && /aws_access_key_id/{print "export AWS_ACCESS_KEY_ID=" $3} 
+  f && /aws_secret_access_key/{print "export AWS_SECRET_ACCESS_KEY=" $3}
+  f && /aws_session_token/{print "export AWS_SESSION_TOKEN=" $3}
+  ' ~/.aws/credentials
+}
+
