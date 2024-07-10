@@ -72,3 +72,37 @@ generate_aws_exports() {
   ' ~/.aws/credentials
 }
 
+get_aws_federated_url() {
+    # Ensure required environment variables are set
+    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
+        echo "Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN environment variables."
+        return 1
+    fi
+
+    # Create JSON session data
+    session_data=$(jq -n --arg sessionId "$AWS_ACCESS_KEY_ID" --arg sessionKey "$AWS_SECRET_ACCESS_KEY" --arg sessionToken "$AWS_SESSION_TOKEN" \
+        '{sessionId: $sessionId, sessionKey: $sessionKey, sessionToken: $sessionToken}')
+
+    # Define AWS federated sign-in endpoint
+    aws_federated_signin_endpoint="https://signin.aws.amazon.com/federation"
+
+    # Get the sign-in token
+    response=$(curl -s -G "$aws_federated_signin_endpoint" --data-urlencode "Action=getSigninToken" --data-urlencode "SessionDuration=43200" --data-urlencode "Session=$session_data")
+    signin_token=$(echo "$response" | jq -r '.SigninToken')
+
+    if [ -z "$signin_token" ]; then
+        echo "Failed to get a sign-in token from the AWS sign-in federation endpoint."
+        return 1
+    fi
+
+    echo "Got a sign-in token from the AWS sign-in federation endpoint."
+
+    # Create the federated URL
+    query_string=$(jq -rn --arg Action "login" --arg Issuer "" --arg Destination "https://console.aws.amazon.com/" --arg SigninToken "$signin_token" \
+        '{Action: $Action, Issuer: $Issuer, Destination: $Destination, SigninToken: $SigninToken} | to_entries | map("\(.key)=\(.value|@uri)") | join("&")')
+
+    federated_url="$aws_federated_signin_endpoint?$query_string"
+
+    # Output the URL as a clickable hyperlink
+    echo -e "${federated_url}"
+}
