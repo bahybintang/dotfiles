@@ -20,7 +20,7 @@ ZSH_HIGHLIGHT_STYLES[comment]='none'
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
 
 export ZSH=$HOME/.oh-my-zsh
-source $ZSH/oh-my-zsh.sh
+. $ZSH/oh-my-zsh.sh
 
 setopt histignorealldups sharehistory
 

@@ -7,7 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 alias nvm="unalias nvm; nvm $@"
 
 # FZF
-[ -r ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -r ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # FNM
 FNM_PATH="$HOME/.local/share/fnm"
@@ -22,4 +22,4 @@ mkdir -p $HOME/.terraform.d/plugin-cache
 # GVM
 export GVM_DIR="$HOME/.gvm"
 sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
-[ -r "$GVM_DIR/scripts/gvm" ] && source "$GVM_DIR/scripts/gvm"
+[ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"

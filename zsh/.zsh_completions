@@ -36,7 +36,7 @@ complete -C /usr/local/bin/aws-sso aws-sso
 # END_AWS_SSO_CLI
 
 # BEGIN_KUBECTL_COMPLETION
-source <(kubectl completion zsh)
+. <(kubectl completion zsh)
 # END_KUBECTL_COMPLETION
 
 # BEGIN_BASH_COMPLETION
