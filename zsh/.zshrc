@@ -33,7 +33,10 @@ HISTFILE=~/.zsh_history
 
 # Use modern completion system
 autoload -Uz compinit
-compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
@@ -65,41 +68,24 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # p10k
-source $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-if [[ $(uname) == "Darwin" ]]; then
-  # GCloud SDK
-  source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-fi
+[ -f $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+[ -f ~/.p10k.zsh ] && . ~/.p10k.zsh
 
 # Custom aliases
-if [ -f ~/.zsh_aliases ]; then
-    . ~/.zsh_aliases
-fi
+[ -f ~/.zsh_aliases ] && . ~/.zsh_aliases
 
 # Custom secrets
-if [ -f ~/.zsh_secrets ]; then
-	. ~/.zsh_secrets
-fi
+[ -f ~/.zsh_secrets ] && . ~/.zsh_secrets
 
 # Custom functions
-if [ -f ~/.zsh_custom_functions ]; then
-	. ~/.zsh_custom_functions
-fi
+[ -f ~/.zsh_custom_functions ] && . ~/.zsh_custom_functions
 
 # Custom exports
-if [ -f ~/.zsh_exports ]; then
-    . ~/.zsh_exports
-fi
+[ -f ~/.zsh_exports ] && . ~/.zsh_exports
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Custom completions
-if [ -f ~/.zsh_completions ]; then
-    . ~/.zsh_completions
-fi
+[ -f ~/.zsh_completions ] && . ~/.zsh_completions
 
 # Custom applications
-if [ -f ~/.zsh_applications ]; then
-    . ~/.zsh_applications
-fi
+[ -f ~/.zsh_applications ] && . ~/.zsh_applications
