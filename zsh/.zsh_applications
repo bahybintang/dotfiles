@@ -3,7 +3,8 @@
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
-alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"
+[ -r "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+alias nvm="unalias nvm; nvm $@"
 
 # FZF
 [ -r ~/.fzf.zsh ] && source ~/.fzf.zsh
