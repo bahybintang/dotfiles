@@ -4,7 +4,5 @@ services:
     image: ubuntu:22.04
     volumes:
       - .:/root/.dotfiles
-    command: |
-      sed -i 's|http://|http://id.|g' /etc/apt/sources.list
-      tail -f /dev/null
+    command: bash -c "sed -i 's|http://archive|http://id.archive|g' /etc/apt/sources.list && tail -f /dev/null"
     restart: always
