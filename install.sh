@@ -1,7 +1,6 @@
 if [ "$(uname)" = "Linux" ]; then
-  apt update
-  apt install 
-  apt install -y git curl stow zsh tmux vim cargo
+  sudo apt update
+  sudo apt install -y git curl stow zsh tmux vim cargo
   echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -10,6 +9,10 @@ if [ "$(uname)" = "Linux" ]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   echo "y y n" | ~/.fzf/install
   cargo install lsd
+  curl -LO https://github.com/neovim/neovim/releases/download/v0.9.1/nvim-linux64.tar.gz
+  tar xzf nvim-linux64.tar.gz
+  sudo cp nvim-linux64/bin/nvim /usr/local/bin
+  rm -rf nvim-linux64 nvim-linux64.tar.gz
   stow --adopt alacritty
   stow --adopt tmux
   stow --adopt vim
