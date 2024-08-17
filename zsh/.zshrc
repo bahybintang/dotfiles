@@ -1,7 +1,6 @@
 # Plugins
 plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting zsh-fzf-history-search dirhistory kubectl)
 
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -104,7 +103,3 @@ fi
 if [ -f ~/.zsh_applications ]; then
     . ~/.zsh_applications
 fi
-
-mkdir -p $HOME/.terraform.d/plugin-cache
-
-[[ -s "/home/bintangbahy/.gvm/scripts/gvm" ]] && source "/home/bintangbahy/.gvm/scripts/gvm"

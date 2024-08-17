@@ -18,10 +18,3 @@ alias dup="docker-compose up -d"
 alias ddown="docker-compose down"
 alias dstop="docker-compose stop"
 alias sso="aws-sso"
-
-# Custom
-alias ssd='cd /media/bintang/SSD'
-alias vb="ssh ubuntu@127.0.0.1 -p 50022"
-alias vw="ssh ubuntu@192.168.61.128"
-alias vwstart="vmrun start /Users/bintang.bahy/Virtual\ Machines.localized/Ubuntu\ 64-bit\ 22.04.1.vmwarevm/Ubuntu\ 64-bit\ 22.04.1.vmx nogui"
-alias vbstart="vboxmanage startvm 'Ubuntu' --type headless"

@@ -1,13 +1,14 @@
 clls() {
   truncate -s 0 /tmp/k8s-clusters.tmp
-  regions=( $(aws account list-regions | jq -r '.Regions[].RegionName') )
+  regions=($(aws account list-regions | jq -r '.Regions[].RegionName'))
   N=20
   (
-  for region in "${regions[@]}"; do
-    ((i=i%N)); ((i++==0)) && wait
-    aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region - \1/g" >> /tmp/k8s-clusters.tmp &
-  done
-  wait
+    for region in "${regions[@]}"; do
+      ((i = i % N))
+      ((i++ == 0)) && wait
+      aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region - \1/g" >>/tmp/k8s-clusters.tmp &
+    done
+    wait
   )
   echo "Available EKS clusters:"
   cat -n /tmp/k8s-clusters.tmp
@@ -17,7 +18,7 @@ clls() {
   if [[ $cluster_select < 1 || $cluster_select > $(wc -l /tmp/k8s-clusters.tmp) ]]; then
     echo "Please select a valid index."
   else
-    line=$(sed -n "$cluster_select{p;q}" < /tmp/k8s-clusters.tmp)
+    line=$(sed -n "$cluster_select{p;q}" </tmp/k8s-clusters.tmp)
     region=$(echo $line | awk '{print $1}')
     cluster=$(echo $line | awk '{print $3}')
     export AWS_REGION=$region
@@ -27,22 +28,22 @@ clls() {
 }
 
 clset() {
-	export KUBECONFIG="$HOME/.kube/$1"
-	touch $KUBECONFIG
-	aws eks update-kubeconfig --name $1
+  export KUBECONFIG="$HOME/.kube/$1"
+  touch $KUBECONFIG
+  aws eks update-kubeconfig --name $1
 }
 
 kdebug() {
-	kubectl debug node/$1 -it --image=ubuntu
+  kubectl debug node/$1 -it --image=ubuntu
 }
 
 _lima() {
-	port=$(limactl list --json | jq .sshLocalPort)
-	if [ -n $port ]; then
-		ssh lima@127.0.0.1 -p $port
-	else
-		echo "VM not started"
-	fi
+  port=$(limactl list --json | jq .sshLocalPort)
+  if [ -n $port ]; then
+    ssh lima@127.0.0.1 -p $port
+  else
+    echo "VM not started"
+  fi
 }
 
 rebase() {
@@ -73,36 +74,36 @@ generate_aws_exports() {
 }
 
 get_aws_federated_url() {
-    # Ensure required environment variables are set
-    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
-        echo "Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN environment variables."
-        return 1
-    fi
+  # Ensure required environment variables are set
+  if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]; then
+    echo "Please set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_SESSION_TOKEN environment variables."
+    return 1
+  fi
 
-    # Create JSON session data
-    session_data=$(jq -n --arg sessionId "$AWS_ACCESS_KEY_ID" --arg sessionKey "$AWS_SECRET_ACCESS_KEY" --arg sessionToken "$AWS_SESSION_TOKEN" \
-        '{sessionId: $sessionId, sessionKey: $sessionKey, sessionToken: $sessionToken}')
+  # Create JSON session data
+  session_data=$(jq -n --arg sessionId "$AWS_ACCESS_KEY_ID" --arg sessionKey "$AWS_SECRET_ACCESS_KEY" --arg sessionToken "$AWS_SESSION_TOKEN" \
+    '{sessionId: $sessionId, sessionKey: $sessionKey, sessionToken: $sessionToken}')
 
-    # Define AWS federated sign-in endpoint
-    aws_federated_signin_endpoint="https://signin.aws.amazon.com/federation"
+  # Define AWS federated sign-in endpoint
+  aws_federated_signin_endpoint="https://signin.aws.amazon.com/federation"
 
-    # Get the sign-in token
-    response=$(curl -s -G "$aws_federated_signin_endpoint" --data-urlencode "Action=getSigninToken" --data-urlencode "SessionDuration=43200" --data-urlencode "Session=$session_data")
-    signin_token=$(echo "$response" | jq -r '.SigninToken')
+  # Get the sign-in token
+  response=$(curl -s -G "$aws_federated_signin_endpoint" --data-urlencode "Action=getSigninToken" --data-urlencode "SessionDuration=43200" --data-urlencode "Session=$session_data")
+  signin_token=$(echo "$response" | jq -r '.SigninToken')
 
-    if [ -z "$signin_token" ]; then
-        echo "Failed to get a sign-in token from the AWS sign-in federation endpoint."
-        return 1
-    fi
+  if [ -z "$signin_token" ]; then
+    echo "Failed to get a sign-in token from the AWS sign-in federation endpoint."
+    return 1
+  fi
 
-    echo "Got a sign-in token from the AWS sign-in federation endpoint."
+  echo "Got a sign-in token from the AWS sign-in federation endpoint."
 
-    # Create the federated URL
-    query_string=$(jq -rn --arg Action "login" --arg Issuer "" --arg Destination "https://console.aws.amazon.com/" --arg SigninToken "$signin_token" \
-        '{Action: $Action, Issuer: $Issuer, Destination: $Destination, SigninToken: $SigninToken} | to_entries | map("\(.key)=\(.value|@uri)") | join("&")')
+  # Create the federated URL
+  query_string=$(jq -rn --arg Action "login" --arg Issuer "" --arg Destination "https://console.aws.amazon.com/" --arg SigninToken "$signin_token" \
+    '{Action: $Action, Issuer: $Issuer, Destination: $Destination, SigninToken: $SigninToken} | to_entries | map("\(.key)=\(.value|@uri)") | join("&")')
 
-    federated_url="$aws_federated_signin_endpoint?$query_string"
+  federated_url="$aws_federated_signin_endpoint?$query_string"
 
-    # Output the URL as a clickable hyperlink
-    echo -e "${federated_url}"
+  # Output the URL as a clickable hyperlink
+  echo -e "${federated_url}"
 }

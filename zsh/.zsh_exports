@@ -1,8 +1,8 @@
 # OS specific exports
 if [[ $(uname) == "Darwin" ]]; then
-    export GOROOT="$(brew --prefix golang)/libexec"
+  export GOROOT="$(brew --prefix golang)/libexec"
 elif [[ $(uname) == "Linux" && -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 # Application specific exports
