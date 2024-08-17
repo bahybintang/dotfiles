@@ -21,5 +21,5 @@ mkdir -p $HOME/.terraform.d/plugin-cache
 
 # GVM
 export GVM_DIR="$HOME/.gvm"
-sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
+[ -r "$GVM_DIR/scripts/gvm" ] && sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
 [ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"
