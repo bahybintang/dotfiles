@@ -1,5 +1,5 @@
 # GCloud
-[ $(uname) == "Darwin" ] && . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+[ $(uname) = "Darwin" ] && . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
