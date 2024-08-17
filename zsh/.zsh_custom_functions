@@ -1,24 +1,25 @@
 clls() {
-  truncate -s 0 /tmp/k8s-clusters.tmp
+  TMP_FILE="/tmp/k8s-clusters-$(date +%s ).tmp"
+  truncate -s 0 $TMP_FILE
   regions=($(aws account list-regions | jq -r '.Regions[].RegionName'))
   N=20
   (
     for region in "${regions[@]}"; do
       ((i = i % N))
       ((i++ == 0)) && wait
-      aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region - \1/g" >>/tmp/k8s-clusters.tmp &
+      aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region - \1/g" >>$TMP_FILE &
     done
     wait
   )
   echo "Available EKS clusters:"
-  cat -n /tmp/k8s-clusters.tmp
+  cat -n $TMP_FILE
   echo -ne "Select cluster index: "
   read cluster_select
 
-  if [[ $cluster_select < 1 || $cluster_select > $(wc -l /tmp/k8s-clusters.tmp) ]]; then
+  if [[ $cluster_select < 1 || $cluster_select > $(wc -l $TMP_FILE) ]]; then
     echo "Please select a valid index."
   else
-    line=$(sed -n "$cluster_select{p;q}" </tmp/k8s-clusters.tmp)
+    line=$(sed -n "$cluster_select{p;q}" <$TMP_FILE)
     region=$(echo $line | awk '{print $1}')
     cluster=$(echo $line | awk '{print $3}')
     export AWS_REGION=$region

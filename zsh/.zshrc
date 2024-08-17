@@ -4,9 +4,7 @@ plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting zsh-fzf-history-se
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ] && . "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
@@ -30,13 +28,6 @@ setopt histignorealldups sharehistory
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
-
-# Use modern completion system
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
 
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
@@ -68,24 +59,24 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # p10k
-[ -f $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
-[ -f ~/.p10k.zsh ] && . ~/.p10k.zsh
+[ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+[ -r ~/.p10k.zsh ] && . ~/.p10k.zsh
 
 # Custom aliases
-[ -f ~/.zsh_aliases ] && . ~/.zsh_aliases
+[ -r ~/.zsh_aliases ] && . ~/.zsh_aliases
 
 # Custom secrets
-[ -f ~/.zsh_secrets ] && . ~/.zsh_secrets
+[ -r ~/.zsh_secrets ] && . ~/.zsh_secrets
 
 # Custom functions
-[ -f ~/.zsh_custom_functions ] && . ~/.zsh_custom_functions
+[ -r ~/.zsh_custom_functions ] && . ~/.zsh_custom_functions
 
 # Custom exports
-[ -f ~/.zsh_exports ] && . ~/.zsh_exports
+[ -r ~/.zsh_exports ] && . ~/.zsh_exports
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Custom completions
-[ -f ~/.zsh_completions ] && . ~/.zsh_completions
+[ -r ~/.zsh_completions ] && . ~/.zsh_completions
 
 # Custom applications
-[ -f ~/.zsh_applications ] && . ~/.zsh_applications
+[ -r ~/.zsh_applications ] && . ~/.zsh_applications

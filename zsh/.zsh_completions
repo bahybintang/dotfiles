@@ -46,3 +46,11 @@ autoload -U +X bashcompinit && bashcompinit
 # BEGIN_TERRAFORM_COMPLETION
 complete -o nospace -C $(which terraform) terraform
 # END_TERRAFORM_COMPLETION
+
+# BEGIN_COMPINIT
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+# END_COMPINIT

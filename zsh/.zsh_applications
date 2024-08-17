@@ -1,14 +1,12 @@
 # GCloud
-if [[ $(uname) == "Darwin" ]]; then
-  source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-fi
+[ $(uname) == "Darwin" ] && . "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
 alias nvm="unalias nvm; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"; nvm $@"
 
 # FZF
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -r ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # FNM
 FNM_PATH="$HOME/.local/share/fnm"
@@ -23,4 +21,4 @@ mkdir -p $HOME/.terraform.d/plugin-cache
 # GVM
 export GVM_DIR="$HOME/.gvm"
 sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
-[[ -s "$GVM_DIR/scripts/gvm" ]] && source "$GVM_DIR/scripts/gvm"
+[ -r "$GVM_DIR/scripts/gvm" ] && source "$GVM_DIR/scripts/gvm"
