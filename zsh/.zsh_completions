@@ -49,6 +49,10 @@ complete -C /usr/local/bin/aws-sso aws-sso
 complete -C $(which aws_completer) aws
 # END_AWS_CLI
 
+# BEGIN_FLUX_CLI
+command -v flux >/dev/null && . <(flux completion zsh)
+# END_FLUX_CLI
+
 # BEGIN_KUBECTL_COMPLETION
 [ $(command -v kubectl) ] && . <(kubectl completion zsh)
 # END_KUBECTL_COMPLETION
