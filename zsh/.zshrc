@@ -29,6 +29,11 @@ HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
+# zsh history append
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+
 # This speeds up pasting w/ autosuggest
 # https://github.com/zsh-users/zsh-autosuggestions/issues/238
 pasteinit() {

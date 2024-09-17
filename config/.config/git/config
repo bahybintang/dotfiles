@@ -1,9 +1,3 @@
-[include]
-  path = config.personal
-
-[include]
-  path = work/config.work 
-
 [url "ssh://git@github.com/"]
   insteadOf = https://github.com/
 
@@ -12,3 +6,9 @@
 
 [url "ssh://git@bitbucket.org/"]
   insteadOf = https://bitbucket.org/
+
+[include]
+  path = config.personal
+
+[include]
+  path = work/config.work
