@@ -63,6 +63,11 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# fzf configs
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+export FZF_CTRL_R_OPTS="--reverse"
+export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border top'
+
 # p10k
 [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 [ -r ~/.p10k.zsh ] && . ~/.p10k.zsh
@@ -85,3 +90,5 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Custom applications
 [ -r ~/.zsh_applications ] && . ~/.zsh_applications
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
