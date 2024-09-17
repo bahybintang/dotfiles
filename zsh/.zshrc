@@ -66,7 +66,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # fzf configs
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 export FZF_CTRL_R_OPTS="--reverse"
-export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border top'
+export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border'
 
 # p10k
 [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
