@@ -64,22 +64,20 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # fzf configs
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-# disable sort when completing `git checkout`
+# Check if in tmux
+if [ -n "$TMUX" ]; then
+  export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border'
+  zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+else
+  export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
+fi
 zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-# NOTE: don't use escape sequences here, fzf-tab will ignore them
 zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
 zstyle ':completion:*' menu no
-# preview directory's content with eza when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
-export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border'
 
 # p10k
 [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
