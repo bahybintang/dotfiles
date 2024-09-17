@@ -34,4 +34,4 @@ _sgpt_zsh() {
     zle end-of-line
   fi
 }
-[ $(command -v sgpt) ] && zle -N _sgpt_zsh && bindkey ^l _sgpt_zsh
+[ $(command -v sgpt) ] && zle -N _sgpt_zsh && bindkey ^i _sgpt_zsh
