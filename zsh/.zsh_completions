@@ -1,3 +1,13 @@
+# BEGIN_COMPINIT
+autoload -Uz compinit
+compinit -C # Use cache to reduce startup time by ~0.1s
+# Have another thread refresh the cache in the background (subshell to hide output)
+(
+  autoload -Uz compinit
+  compinit &
+)
+# END_COMPINIT
+
 # BEGIN_AWS_SSO_CLI
 __aws_sso_profile_complete() {
   COMPREPLY=()
@@ -46,11 +56,3 @@ autoload -U +X bashcompinit && bashcompinit
 # BEGIN_TERRAFORM_COMPLETION
 complete -o nospace -C $(which terraform) terraform
 # END_TERRAFORM_COMPLETION
-
-# BEGIN_COMPINIT
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-compinit -C
-# END_COMPINIT
