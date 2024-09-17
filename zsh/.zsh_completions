@@ -45,6 +45,10 @@ complete -F __aws_sso_profile_complete aws-sso-profile
 complete -C /usr/local/bin/aws-sso aws-sso
 # END_AWS_SSO_CLI
 
+# BEGIN_AWS_CLI
+complete -C $(which aws_completer) aws
+# END_AWS_CLI
+
 # BEGIN_KUBECTL_COMPLETION
 [ $(command -v kubectl) ] && . <(kubectl completion zsh)
 # END_KUBECTL_COMPLETION
