@@ -1,9 +1,18 @@
 #!/bin/bash
 
+assert_not_empty() {
+  local readonly var_name="$1"
+  value=$(eval echo \$$var_name)
+  if [ -z "$value" ]; then
+    echo "The variable $var_name is empty!"
+    exit 1
+  fi
+}
+
 install_deps_and_easy_package() {
   if [ "$(uname)" = "Linux" ]; then
     sudo apt update
-    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config
+    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip
     cargo install lsd
   fi
 }
@@ -58,12 +67,61 @@ link_dotfiles() {
   fi
 }
 
+install_ollama() {
+  if [ "$(uname)" = "Linux" ]; then
+    curl -fsSL https://ollama.com/install.sh | sh
+  fi
+}
+
+run_ollama_model() {
+  if [ "$(uname)" = "Linux" ]; then
+    ollama run phi3
+  fi
+}
+
+install_shell_gpt() {
+  if [ "$(uname)" = "Linux" ]; then
+    pip3 install shell-gpt litellm
+    stow --adopt shell-gpt
+  fi
+}
+
 main() {
+  local cmd=""
+  local install_optional=false
+
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+    install | -i)
+      cmd="install"
+      shift
+      ;;
+    --install-optional)
+      install_optional=true
+      shift
+      ;;
+    *)
+      echo "Unknown parameter passed: $1"
+      exit 1
+      ;;
+    esac
+  done
+
+  assert_not_empty "cmd"
+
   install_deps_and_easy_package
   install_tmux
   install_zsh
   install_neovim
   install_fzf
+
+  if [ "$install_optional" = true ]; then
+    echo "Installing optional packages..."
+    if [ "$(uname)" = "Linux" ]; then
+      sudo apt install -y exa bat fd-find ripgrep
+    fi
+  fi
+
   link_dotfiles
 }
 

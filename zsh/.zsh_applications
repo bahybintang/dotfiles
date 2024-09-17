@@ -23,3 +23,15 @@ mkdir -p $HOME/.terraform.d/plugin-cache
 export GVM_DIR="$HOME/.gvm"
 [ -r "$GVM_DIR/scripts/gvm" ] && sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
 [ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"
+
+# Shell-GPT
+_sgpt_zsh() {
+  if [[ -n "$BUFFER" ]]; then
+    _sgpt_prev_cmd=$BUFFER
+    BUFFER+="⌛"
+    zle -I && zle redisplay
+    BUFFER=$(sgpt --shell --no-interaction <<<"$_sgpt_prev_cmd")
+    zle end-of-line
+  fi
+}
+[ $(command -v sgpt) ] && zle -N _sgpt_zsh && bindkey ^l _sgpt_zsh
