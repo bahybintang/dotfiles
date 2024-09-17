@@ -1,5 +1,5 @@
 # Plugins
-plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting zsh-fzf-history-search dirhistory kubectl fzf-tab)
+plugins=(tmux git zsh-autosuggestions zsh-syntax-highlighting zsh-fzf-history-search dirhistory kubectl fzf-tab aws)
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
