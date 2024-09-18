@@ -75,7 +75,8 @@ install_ollama() {
 
 run_ollama_model() {
   if [ "$(uname)" = "Linux" ]; then
-    ollama run phi3
+    ollama pull phi3
+    ollama pull gemma2:2b
   fi
 }
 

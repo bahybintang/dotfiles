@@ -28,9 +28,9 @@ export GVM_DIR="$HOME/.gvm"
 _sgpt_zsh() {
   if [[ -n "$BUFFER" ]]; then
     _sgpt_prev_cmd=$BUFFER
-    BUFFER+="⌛"
+    BUFFER+=" ⌛"
     zle -I && zle redisplay
-    BUFFER=$(sgpt --shell --no-interaction <<<"$_sgpt_prev_cmd")
+    BUFFER=$(sgpt --shell --no-interaction <<<"$_sgpt_prev_cmd" | sed '/```/d')
     zle end-of-line
   fi
 }
