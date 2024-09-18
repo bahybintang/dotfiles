@@ -82,7 +82,6 @@ run_ollama_model() {
 install_shell_gpt() {
   if [ "$(uname)" = "Linux" ]; then
     pip3 install shell-gpt litellm
-    stow --adopt shell-gpt
   fi
 }
 
