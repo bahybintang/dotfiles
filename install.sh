@@ -83,6 +83,8 @@ run_ollama_model() {
 install_shell_gpt() {
   if [ "$(uname)" = "Linux" ]; then
     pip3 install shell-gpt litellm
+    sudo mkdir -p /opt/shell_gpt
+    sudo chown -R $(whoami):$(whoami) /opt/shell_gpt
   fi
 }
 
