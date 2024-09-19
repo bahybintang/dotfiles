@@ -66,9 +66,11 @@ install_zsh() {
 
 install_neovim() {
   if is_linux; then
-    curl -LO https://github.com/neovim/neovim/releases/download/v0.9.1/nvim-linux64.tar.gz
+    curl -LO https://github.com/neovim/neovim/releases/download/v0.10.1/nvim-linux64.tar.gz
     tar xzf nvim-linux64.tar.gz
-    sudo cp nvim-linux64/bin/nvim /usr/local/bin
+    sudo cp nvim-linux64/bin/nvim /usr/bin
+    sudo cp -r nvim-linux64/share/nvim /usr/share
+    sudo cp -r nvim-linux64/lib/nvim /usr/lib
     rm -rf nvim-linux64 nvim-linux64.tar.gz
   fi
 }

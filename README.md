@@ -1,14 +1,21 @@
 # How to
+
 ## Install GNU Stow
+
+### MacOS
+
 ```bash
 brew install stow
 ```
 
-## Sync
+### Debian/Ubuntu
+  
+```bash
+sudo apt install stow
 ```
-stow alacritty
-stow tmux
-stow vim
-stow zsh
-stow config 
+
+## Sync
+
+```bash
+stow */
 ```
