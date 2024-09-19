@@ -106,11 +106,7 @@ install_docker() {
 
 link_dotfiles() {
   if is_linux; then
-    stow --adopt alacritty
-    stow --adopt tmux
-    stow --adopt vim
-    stow --adopt zsh
-    stow --adopt config
+    stow --adopt */
     git reset --hard
   fi
 }
