@@ -9,8 +9,32 @@ assert_not_empty() {
   fi
 }
 
+is_linux() {
+  is_linux
+}
+
+is_macos() {
+  uname | grep -i darwin 2>&1 >/dev/null
+}
+
+is_wsl() {
+  grep -i microsoft /proc/version 2>&1 >/dev/null
+}
+
+is_amd_gpu() {
+  lspci | grep -i vga | grep AMD 2>&1 >/dev/null
+}
+
+is_nvidia_gpu() {
+  lspci | grep -i vga | grep NVIDIA 2>&1 >/dev/null
+}
+
+is_ubuntu() {
+  grep -i ubuntu /etc/os-release 2>&1 >/dev/null
+}
+
 install_deps_and_easy_package() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     sudo apt update
     sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip
     cargo install lsd
@@ -18,7 +42,7 @@ install_deps_and_easy_package() {
 }
 
 install_tmux() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     curl -LO https://github.com/tmux/tmux/releases/download/3.4/tmux-3.4.tar.gz
     tar xzf tmux-3.4.tar.gz
     cd tmux-3.4
@@ -30,7 +54,7 @@ install_tmux() {
 }
 
 install_zsh() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
@@ -41,7 +65,7 @@ install_zsh() {
 }
 
 install_neovim() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     curl -LO https://github.com/neovim/neovim/releases/download/v0.9.1/nvim-linux64.tar.gz
     tar xzf nvim-linux64.tar.gz
     sudo cp nvim-linux64/bin/nvim /usr/local/bin
@@ -50,14 +74,36 @@ install_neovim() {
 }
 
 install_fzf() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     echo "y y n" | ~/.fzf/install
   fi
 }
 
+install_docker() {
+  if is_linux && is_ubuntu; then
+    sudo apt update
+    sudo apt install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \n "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \n  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \n sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+    sudo apt update
+    sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker
+
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+  fi
+}
+
 link_dotfiles() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     stow --adopt alacritty
     stow --adopt tmux
     stow --adopt vim
@@ -68,20 +114,26 @@ link_dotfiles() {
 }
 
 install_ollama() {
-  if [ "$(uname)" = "Linux" ]; then
-    curl -fsSL https://ollama.com/install.sh | sh
+  if is_linux && is_amd_gpu; then
+    docker run -d --name ollama --pull always --restart always \
+      -p 127.0.0.1:11434:11434 -v ollama:/root/.ollama --stop-signal SIGKILL \
+      --device /dev/dri --device /dev/kfd \
+      -e HSA_OVERRIDE_GFX_VERSION=9.0.0 -e HSA_ENABLE_SDMA=0 \
+      docker.io/ollama/ollama:rocm
+  else
+    docker run -d --name ollama --pull always --restart always \
+      -p 127.0.0.1:11434:11434 -v ollama:/root/.ollama --stop-signal SIGKILL \
+      docker.io/ollama/ollama
   fi
 }
 
 run_ollama_model() {
-  if [ "$(uname)" = "Linux" ]; then
-    ollama pull phi3
-    ollama pull gemma2:2b
-  fi
+  docker exec ollama ollama pull phi3
+  docker exec ollama ollama pull gemma2:2b
 }
 
 install_shell_gpt() {
-  if [ "$(uname)" = "Linux" ]; then
+  if is_linux; then
     pip3 install shell-gpt litellm
     sudo mkdir -p /opt/shell_gpt
     sudo chown -R $(whoami):$(whoami) /opt/shell_gpt
@@ -116,10 +168,11 @@ main() {
   install_zsh
   install_neovim
   install_fzf
+  install_docker
 
   if [ "$install_optional" = true ]; then
     echo "Installing optional packages..."
-    if [ "$(uname)" = "Linux" ]; then
+    if is_linux; then
       sudo apt install -y exa bat fd-find ripgrep
     fi
   fi
@@ -128,3 +181,4 @@ main() {
 }
 
 main "$@"
+# is_linux
