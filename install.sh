@@ -147,7 +147,6 @@ main() {
     case "$1" in
     install | -i)
       cmd="install"
-      shift
       ;;
     --install-optional)
       install_optional="true"
@@ -158,6 +157,7 @@ main() {
       exit 1
       ;;
     esac
+    shift
   done
 
   assert_not_empty "cmd"
