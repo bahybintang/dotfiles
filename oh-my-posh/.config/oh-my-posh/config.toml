@@ -7,7 +7,6 @@ console_title_template = '{{ .Shell }} in {{ .Folder }}'
 [[blocks]]
 type      = 'prompt'
 alignment = 'left'
-# newline   = true
 
   [[blocks.segments]]
   type     = "os"
@@ -116,7 +115,7 @@ newline   = true
     "{{if eq .Code 0}}p:green{{end}}",
   ]
   background = 'transparent'
-  template = '❯'
+  template = '🤔❯'
 
 [transient_prompt]
 foreground_templates = [
