@@ -1,0 +1,226 @@
+#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+version                = 2
+final_space            = true
+console_title_template = '{{ .Shell }} in {{ .Folder }}'
+
+[[blocks]]
+type      = 'prompt'
+alignment = 'left'
+# newline   = true
+
+  [[blocks.segments]]
+  type     = "os"
+  style    = "plain"
+  template = "{{ if .WSL }}WSL at {{ end }}{{.Icon}}"
+
+  [[blocks.segments]]
+  type       = 'path'
+  style      = 'plain'
+  background = 'transparent'
+  foreground = 'p:blue'
+  template   = ' {{ if eq .Env.HOME .AbsolutePWD }} {{ else }} {{ end }}{{ .Path }}'
+
+    [blocks.segments.properties]
+    style = 'full'
+
+  [[blocks.segments]]
+  type       = "git"
+  style      = "plain"
+  foreground = "p:green"
+  template   = " <p:white>on</> {{ .UpstreamIcon }} {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}<p:blue>  {{ .Working.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }}<p:yellow>  {{ .Staging.String }}</>{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }}"
+
+    [blocks.segments.properties]
+    fetch_status        = true
+    fetch_upstream_icon = true
+    source              = "cli"
+
+[[blocks]]
+type      = 'prompt'
+alignment = 'right'
+
+  [[blocks.segments]]
+  type       = "go"
+  style      = "plain"
+  foreground = "p:cyan"
+  template   = "go{{ .Full }} "
+
+  [[blocks.segments]]
+  type       = "node"
+  style      = "plain"
+  foreground = "p:green"
+  template   = "node{{ .Full }} "
+
+  [[blocks.segments]]
+  type       = "python"
+  style      = "plain"
+  foreground = "p:yellow"
+  template   = "py{{ .Full }} "
+
+  [[blocks.segments]]
+  type       = "kubectl"
+  alias      = "k8s"
+  style      = "plain"
+  foreground = "p:blue"
+  template   = ' ﴱ {{ (split "/" .Cluster)._1 }}{{ if .Namespace }} :: {{ .Namespace }}{{ end }} '
+
+  [[blocks.segments]]
+  type       = "aws"
+  style      = "plain"
+  foreground = "p:orange"
+  template   = '☁️ {{ if .Env.AWS_SSO_ROLE_NAME }}{{ .Env.AWS_SSO_ROLE_NAME }}{{ end }}@{{ if .Env.AWS_SSO_ACCOUNT_ID }}{{ .Env.AWS_SSO_ACCOUNT_ID }}:{{ end }}{{ if .Region }}{{ .Region }}{{ end }} '
+
+  [[blocks.segments]]
+  type       = 'text'
+  style      = 'plain'
+  foreground = 'p:orange'
+  template   = '😼 meow'
+
+[[blocks]]
+type     = 'rprompt'
+overflow = 'hidden'
+
+  [[blocks.segments]]
+  type       = 'executiontime'
+  style      = 'plain'
+  foreground = 'p:yellow'
+  background = 'transparent'
+  template   = '{{ .FormattedMs }}'
+
+    [blocks.segments.properties]
+    threshold = 1000
+
+  [[blocks.segments]]
+  type = "status"
+  style = "plain"
+  foreground = "#ffffff"
+  foreground_templates = [
+    "{{if gt .Code 0}}p:red{{end}}",
+    "{{if eq .Code 0}}p:green{{end}}",
+  ]
+
+    [blocks.segments.properties]
+    always_enabled  = true
+    status_template = "{{ if .Error }}✘ {{ reason .Code }}{{ else }}✔{{ end }}"
+
+[[blocks]]
+type      = 'prompt'
+alignment = 'left'
+newline   = true
+
+  [[blocks.segments]]
+  type = 'text'
+  style = 'plain'
+  foreground_templates = [
+    "{{if gt .Code 0}}p:red{{end}}",
+    "{{if eq .Code 0}}p:green{{end}}",
+  ]
+  background = 'transparent'
+  template = '❯'
+
+[transient_prompt]
+foreground_templates = [
+  "{{if gt .Code 0}}p:red{{end}}",
+  "{{if eq .Code 0}}p:green{{end}}",
+]
+background = 'transparent'
+template = '❯ '
+
+[secondary_prompt]
+foreground = 'magenta'
+background = 'transparent'
+template   = '❯❯ '
+
+[palettes]
+template = 'material'
+
+  [palettes.list.dracula]
+  cyan    = "#6AC5D3"
+  green   = "#2FD651"
+  orange  = "#DE9442"
+  pink    = "#ff79c6"
+  purple  = "#bd93f9"
+  red     = "#DE312B"
+  yellow  = "#D0D662"
+  white   = "#D7D4C8"
+  blue    = "#9C6FCF"
+  black   = "#44475A"
+  magenta = "#DE559C"
+
+  [palettes.list.solarized]
+  cyan    = "#2AA198"
+  green   = "#859900"
+  orange  = "#CB4B16"
+  pink    = "#D33682"
+  purple  = "#6C71C4"
+  red     = "#DC322F"
+  yellow  = "#B58900"
+  white   = "#FDF6E3"
+  blue    = "#268BD2"
+  black   = "#073642"
+  magenta = "#D33682"
+
+  [palettes.list.gruvbox]
+  cyan    = "#83A598"
+  green   = "#8EC07C"
+  orange  = "#FE8019"
+  pink    = "#FB4934"
+  purple  = "#D3869B"
+  red     = "#CC241D"
+  yellow  = "#FABD2F"
+  white   = "#EBDBB2"
+  blue    = "#458588"
+  black   = "#282828"
+  magenta = "#D3869B"
+
+  [palettes.list.nord]
+  cyan    = "#88C0D0"
+  green   = "#A3BE8C"
+  orange  = "#D08770"
+  pink    = "#BF616A"
+  purple  = "#B48EAD"
+  red     = "#BF616A"
+  yellow  = "#EBCB8B"
+  white   = "#ECEFF4"
+  blue    = "#5E81AC"
+  black   = "#2E3440"
+  magenta = "#B48EAD"
+
+  [palettes.list.material]
+  cyan    = "#00BCD4"
+  green   = "#4CAF50"
+  orange  = "#FF9800"
+  pink    = "#E91E63"
+  purple  = "#9C27B0"
+  red     = "#F44336"
+  yellow  = "#FFEB3B"
+  white   = "#FAFAFA"
+  blue    = "#2196F3"
+  black   = "#212121"
+  magenta = "#E91E63"
+
+  [palettes.list.material_light]
+  cyan    = "#B2EBF2"
+  green   = "#C8E6C9"
+  orange  = "#FFE0B2"
+  pink    = "#F8BBD0"
+  purple  = "#E1BEE7"
+  red     = "#FFCDD2"
+  yellow  = "#FFF9C4"
+  white   = "#FFFFFF"
+  blue    = "#BBDEFB"
+  black   = "#CFD8DC"
+  magenta = "#F48FB1"
+
+  [palettes.list.material_dark]
+  cyan    = "#0097A7"
+  green   = "#388E3C"
+  orange  = "#F57C00"
+  pink    = "#C2185B"
+  purple  = "#7B1FA2"
+  red     = "#D32F2F"
+  yellow  = "#FBC02D"
+  white   = "#E0E0E0"
+  blue    = "#1976D2"
+  black   = "#000000"
+  magenta = "#D81B60"
