@@ -96,9 +96,13 @@ install_docker() {
     sudo apt update
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-    newgrp docker
+    if ! getent group docker >/dev/null; then
+      sudo groupadd docker
+    fi
+    if ! groups $USER | grep -q "\bdocker\b"; then
+      sudo usermod -aG docker $USER
+      newgrp docker
+    fi
 
     sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
@@ -205,4 +209,3 @@ main() {
 }
 
 main "$@"
-# is_linux
