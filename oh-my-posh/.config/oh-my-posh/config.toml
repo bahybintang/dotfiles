@@ -69,6 +69,12 @@ alignment = 'right'
   foreground = "p:orange"
   template   = '☁️ {{ if .Env.AWS_SSO_ROLE_NAME }}{{ .Env.AWS_SSO_ROLE_NAME }}{{ end }}@{{ if .Env.AWS_SSO_ACCOUNT_ID }}{{ .Env.AWS_SSO_ACCOUNT_ID }}:{{ end }}{{ if .Region }}{{ .Region }}{{ end }} '
 
+  [[blocks.segments]]
+  type = "session"
+  style = "diamond"
+  foreground = "#ffffff"
+  template = "{{ if .SSHSession }} {{ .UserName }}@{{ .HostName }}{{ end }}"
+
   # [[blocks.segments]]
   # type       = 'text'
   # style      = 'plain'
