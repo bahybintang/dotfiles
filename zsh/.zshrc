@@ -4,7 +4,7 @@ plugins=(tmux git kubectl aws fzf-tab zsh-autosuggestions zsh-syntax-highlightin
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ] && . "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# [ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ] && . "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
@@ -78,8 +78,8 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
 
 # p10k
-[ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
-[ -r ~/.p10k.zsh ] && . ~/.p10k.zsh
+# [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+# [ -r ~/.p10k.zsh ] && . ~/.p10k.zsh
 
 # Custom aliases
 [ -r ~/.zsh_aliases ] && . ~/.zsh_aliases
@@ -99,3 +99,6 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # Custom applications
 [ -r ~/.zsh_applications ] && . ~/.zsh_applications
+
+# oh-my-posh
+eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
