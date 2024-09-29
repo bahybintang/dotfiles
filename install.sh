@@ -36,7 +36,7 @@ is_ubuntu() {
 install_deps_and_easy_package() {
   if is_linux; then
     sudo apt update
-    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip
+    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip
     cargo install lsd
   fi
 }
@@ -61,7 +61,7 @@ install_zsh() {
     git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
     git clone https://github.com/joshskidmore/zsh-fzf-history-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
     git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
-    curl -s https://ohmyposh.dev/install.sh | sudo bash -s
+    curl -s https://ohmyposh.dev/install.sh | sudo bash -s -- -d /usr/local/bin
   fi
 }
 
@@ -86,7 +86,7 @@ install_fzf() {
 install_docker() {
   if is_linux && is_ubuntu; then
     sudo apt update
-    sudo apt install ca-certificates curl
+    sudo apt install -y ca-certificates curl
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -94,7 +94,7 @@ install_docker() {
     # Add the repository to Apt sources:
     echo \n "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \n  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \n sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
     sudo apt update
-    sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
     sudo groupadd docker
     sudo usermod -aG docker $USER
