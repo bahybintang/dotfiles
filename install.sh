@@ -162,24 +162,46 @@ main() {
 
   assert_not_empty "cmd"
 
+  echo "Running $cmd command..."
+
+  echo "Installing dependencies and easy packages..."
   install_deps_and_easy_package
+
+  echo "Installing tmux..."
   install_tmux
+
+  echo "Installing zsh..."
   install_zsh
+
+  echo "Installing neovim..."
   install_neovim
+
+  echo "Installing fzf..."
   install_fzf
+
+  echo "Installing docker..."
   install_docker
 
   if [ "$install_optional" = "true" ]; then
     echo "Installing optional packages..."
     if is_linux; then
       sudo apt install -y exa bat fd-find ripgrep
+
+      echo "Installing ollama..."
       install_ollama
+
+      echo "Running ollama model..."
       run_ollama_model
+
+      echo "Installing shell-gpt..."
       install_shell_gpt
     fi
   fi
 
+  echo "Linking dotfiles..."
   link_dotfiles
+
+  echo "Done!"
 }
 
 main "$@"
