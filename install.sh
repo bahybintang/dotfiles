@@ -10,7 +10,7 @@ assert_not_empty() {
 }
 
 is_linux() {
-  is_linux
+  uname | grep -i linux 2>&1 >/dev/null
 }
 
 is_macos() {
