@@ -141,7 +141,7 @@ install_shell_gpt() {
 
 main() {
   local cmd=""
-  local install_optional=false
+  local install_optional="false"
 
   while [ "$#" -gt 0 ]; do
     case "$1" in
@@ -150,7 +150,7 @@ main() {
       shift
       ;;
     --install-optional)
-      install_optional=true
+      install_optional="true"
       shift
       ;;
     *)
@@ -169,10 +169,13 @@ main() {
   install_fzf
   install_docker
 
-  if [ "$install_optional" = true ]; then
+  if [ "$install_optional" = "true" ]; then
     echo "Installing optional packages..."
     if is_linux; then
       sudo apt install -y exa bat fd-find ripgrep
+      install_ollama
+      run_ollama_model
+      install_shell_gpt
     fi
   fi
 
