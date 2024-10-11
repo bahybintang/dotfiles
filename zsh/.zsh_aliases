@@ -1,8 +1,8 @@
 # Main
-alias ls="lsd"
-alias la="lsd -al"
-alias ll="lsd -lh"
-alias l='lsd -lah'
+alias ls="eza"
+alias la="eza -al"
+alias ll="eza -lh"
+alias l='eza -lah'
 alias gcmsg='git commit -m'
 alias gc='git checkout'
 alias gst='git status'

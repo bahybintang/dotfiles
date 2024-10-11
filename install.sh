@@ -37,7 +37,7 @@ install_deps_and_easy_package() {
   if is_linux; then
     sudo apt update
     sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip
-    cargo install lsd
+    cargo install eza
   fi
 }
 
