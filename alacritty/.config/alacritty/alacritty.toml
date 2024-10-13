@@ -107,8 +107,5 @@ args = ["-l", "-c", "tmux attach -t base || tmux new -s base"]
 program = "/bin/zsh"
 
 [window]
-blur = true
 decorations = "transparent"
-opacity = 0.6
 startup_mode = "Windowed"
-

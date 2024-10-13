@@ -18,3 +18,4 @@ alias dup="docker-compose up -d"
 alias ddown="docker-compose down"
 alias dstop="docker-compose stop"
 alias sso="aws-sso"
+alias copy='xclip -sel clip'
