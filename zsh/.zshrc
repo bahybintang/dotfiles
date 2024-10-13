@@ -73,6 +73,7 @@ if [ -n "$TMUX" ]; then
 else
   export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
 fi
+zstyle ':fzf-tab:*' popup-min-size 60 12
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
