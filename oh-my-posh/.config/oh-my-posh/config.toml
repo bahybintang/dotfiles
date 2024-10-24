@@ -61,7 +61,7 @@ alignment = 'right'
   alias      = "k8s"
   style      = "plain"
   foreground = "p:blue"
-  template   = ' ﴱ {{ (split "/" .Cluster)._1 }}{{ if .Namespace }} :: {{ .Namespace }}{{ end }} '
+  template   = ' ⎈ {{ (split "/" .Cluster)._1 }}{{ if .Namespace }} :: {{ .Namespace }}{{ end }} '
 
   [[blocks.segments]]
   type       = "aws"
