@@ -1,6 +1,5 @@
 clls() {
-  TMP_FILE="/tmp/k8s-clusters-$(date +%s ).tmp"
-  truncate -s 0 $TMP_FILE
+  TMP_FILE="/tmp/k8s-clusters-$(date +%s).tmp"
   regions=($(aws account list-regions | jq -r '.Regions[].RegionName'))
   N=20
   (
@@ -11,26 +10,26 @@ clls() {
     done
     wait
   )
-  echo "Available EKS clusters:"
-  cat -n $TMP_FILE
-  echo -ne "Select cluster index: "
-  read cluster_select
 
-  if [[ $cluster_select < 1 || $cluster_select > $(wc -l $TMP_FILE) ]]; then
-    echo "Please select a valid index."
-  else
-    line=$(sed -n "$cluster_select{p;q}" <$TMP_FILE)
-    region=$(echo $line | awk '{print $1}')
-    cluster=$(echo $line | awk '{print $3}')
-    export AWS_REGION=$region
-    clset $cluster
-    echo "Selected $cluster in $region, now you can access the cluster!"
-  fi
+  arr=()
+  while IFS="\n" read -r line; do
+    arr+=("$line" "")
+  done <$TMP_FILE
+  cluster_select=$(dialog --keep-tite --title "Select EKS Cluster" --menu "Available EKS clusters:" 0 0 0 "${arr[@]}" 3>&1 1>&2 2>&3)
+
+  region=$(echo $cluster_select | awk -F '( - )' '{print $1}')
+  cluster=$(echo $cluster_select | awk -F '( - )' '{print $2}')
+  export AWS_REGION=$region
+  clset $cluster
+  echo "Selected $cluster in $region, now you can access the cluster!"
+
+  [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
 
 clset() {
   export KUBECONFIG="$HOME/.kube/$1"
   touch $KUBECONFIG
+  chmod 600 $KUBECONFIG
   aws eks update-kubeconfig --name $1
 }
 
