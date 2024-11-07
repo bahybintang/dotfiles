@@ -19,3 +19,4 @@ alias ddown="docker-compose down"
 alias dstop="docker-compose stop"
 alias sso="aws-sso"
 alias copy='xclip -sel clip'
+alias code='TMUX="" code'
