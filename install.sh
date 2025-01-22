@@ -37,6 +37,7 @@ install_deps_and_easy_package() {
   if is_linux; then
     sudo apt update
     sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     cargo install eza
   fi
 }
@@ -92,7 +93,7 @@ install_docker() {
     sudo chmod a+r /etc/apt/keyrings/docker.asc
 
     # Add the repository to Apt sources:
-    echo \n "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \n  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \n sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
     sudo apt update
     sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
