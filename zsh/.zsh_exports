@@ -15,6 +15,7 @@ export JAVA_HOME=/usr/lib/jvm/bellsoft-java8-full-amd64
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
+export TG_PROVIDER_CACHE=1
 
 # PATH exports
 export PATH="$HOME/gems/bin:$PATH"
