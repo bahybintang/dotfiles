@@ -36,9 +36,12 @@ is_ubuntu() {
 install_deps_and_easy_package() {
   if is_linux; then
     sudo apt update
-    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip
+    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip bison
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     cargo install eza
+    curl -fsSL https://pyenv.run | bash
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+    bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
   fi
 }
 
