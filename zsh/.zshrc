@@ -78,6 +78,9 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
 
+# IBeam cursor
+printf '\e[5 q' > $(tty)
+
 # p10k
 # [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 # [ -r ~/.p10k.zsh ] && . ~/.p10k.zsh

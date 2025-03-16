@@ -22,6 +22,12 @@ fi
 # Terraform
 mkdir -p $HOME/.terraform.d/plugin-cache
 
+# TGENV
+export TGENV_AUTO_INSTALL=true
+
+# TFENV
+export TFENV_AUTO_INSTALL=true
+
 # GVM
 export GVM_DIR="$HOME/.gvm"
 [ -r "$GVM_DIR/scripts/gvm" ] && sed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
