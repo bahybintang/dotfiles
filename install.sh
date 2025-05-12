@@ -36,12 +36,16 @@ is_ubuntu() {
 install_deps_and_easy_package() {
   if is_linux; then
     sudo apt update
-    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip bison
+    sudo apt install -y git curl stow zsh vim cargo libevent-dev ncurses-dev build-essential bison pkg-config python3 python3-pip unzip bison bat ripgrep
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     cargo install eza
     curl -fsSL https://pyenv.run | bash
     curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
     bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  fi
+  if is_macos; then
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    brew install git stow zsh vim rust gvm fnm pyenv eza python3 ncurses libevent bat ripgrep gsed
   fi
 }
 
@@ -55,17 +59,23 @@ install_tmux() {
     cd ..
     rm -rf tmux-3.4*
   fi
+  if is_macos; then
+    brew install tmux
+  fi
 }
 
 install_zsh() {
+  echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  git clone https://github.com/joshskidmore/zsh-fzf-history-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
+  git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+
   if is_linux; then
-    echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    # git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    git clone https://github.com/joshskidmore/zsh-fzf-history-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
-    git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
     curl -s https://ohmyposh.dev/install.sh | sudo bash -s -- -d /usr/local/bin
+  fi
+  if is_macos; then
+    brew install oh-my-posh
   fi
 }
 
@@ -78,12 +88,18 @@ install_neovim() {
     sudo cp -r nvim-linux64/lib/nvim /usr/lib
     rm -rf nvim-linux64 nvim-linux64.tar.gz
   fi
+  if is_macos; then
+    brew install neovim
+  fi
 }
 
 install_fzf() {
   if is_linux; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     echo "y y n" | ~/.fzf/install
+  fi
+  if is_macos; then
+    brew install fzf
   fi
 }
 
@@ -110,6 +126,9 @@ install_docker() {
 
     sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
+  fi
+  if is_macos; then
+    brew install docker docker-compose
   fi
 }
 
@@ -140,7 +159,7 @@ run_ollama_model() {
 }
 
 install_shell_gpt() {
-  if is_linux; then
+  if is_linux || is_macos; then
     pip3 install shell-gpt litellm
     sudo mkdir -p /opt/shell_gpt
     sudo chown -R $(whoami):$(whoami) /opt/shell_gpt
@@ -193,8 +212,6 @@ main() {
   if [ "$install_optional" = "true" ]; then
     echo "Installing optional packages..."
     if is_linux; then
-      sudo apt install -y exa bat fd-find ripgrep
-
       echo "Installing ollama..."
       install_ollama
 

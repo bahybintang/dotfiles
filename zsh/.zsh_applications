@@ -30,7 +30,8 @@ export TFENV_AUTO_INSTALL=true
 
 # GVM
 export GVM_DIR="$HOME/.gvm"
-[ -r "$GVM_DIR/scripts/gvm" ] && gsed -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
+SED_CMD=$(case "$OSTYPE" in darwin*) echo "gsed" ;; *) echo "sed" ;; esac)
+[ -r "$GVM_DIR/scripts/gvm" ] && $SED_CMD -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
 [ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"
 
 # Shell-GPT
