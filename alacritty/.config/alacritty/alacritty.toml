@@ -102,10 +102,10 @@ chars = "\u001BB"
 key = "Left"
 mods = "Alt"
 
-[shell]
+[terminal.shell]
 args = ["-l", "-c", "tmux attach -t base || tmux new -s base"]
 program = "/bin/zsh"
 
 [window]
-decorations = "transparent"
+# decorations = "transparent"
 startup_mode = "Windowed"
