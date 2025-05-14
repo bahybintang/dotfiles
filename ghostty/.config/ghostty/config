@@ -3,3 +3,4 @@ command = zsh -l -c "tmux attach -t base || tmux new -s base"
 font-family = "JetBrainsMono Nerd Font"
 background-opacity = 0.80
 theme = "catppuccin-mocha"
+cursor-style = "bar"
