@@ -12,3 +12,7 @@
 
 [include]
   path = work/config.work
+
+[alias]
+	exec = "!exec "
+	root = rev-parse --show-toplevel
