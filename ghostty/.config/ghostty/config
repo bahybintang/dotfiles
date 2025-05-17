@@ -4,3 +4,4 @@ font-family = "JetBrainsMono Nerd Font"
 background-opacity = 0.80
 theme = "catppuccin-mocha"
 cursor-style = "bar"
+keybind = global:cmd+shift+space=toggle_quick_terminal

@@ -1,109 +1,113 @@
 [colors]
 draw_bold_text_with_bright_colors = true
 
-[[colors.indexed_colors]]
-color = "#F5A97F"
-index = 16
+  [[colors.indexed_colors]]
+  color = "#F5A97F"
+  index = 16
 
-[[colors.indexed_colors]]
-color = "#F4DBD6"
-index = 17
+  [[colors.indexed_colors]]
+  color = "#F4DBD6"
+  index = 17
 
-[colors.bright]
-black = "#5B6078"
-blue = "#8AADF4"
-cyan = "#8BD5CA"
-green = "#A6DA95"
-magenta = "#F5BDE6"
-red = "#ED8796"
-white = "#A5ADCB"
-yellow = "#EED49F"
+  [colors.bright]
+  black   = "#5B6078"
+  blue    = "#8AADF4"
+  cyan    = "#8BD5CA"
+  green   = "#A6DA95"
+  magenta = "#F5BDE6"
+  red     = "#ED8796"
+  white   = "#A5ADCB"
+  yellow  = "#EED49F"
 
-[colors.cursor]
-cursor = "#F4DBD6"
-text = "#24273A"
+  [colors.cursor]
+  cursor = "#F4DBD6"
+  text   = "#24273A"
 
-[colors.dim]
-black = "#494D64"
-blue = "#8AADF4"
-cyan = "#8BD5CA"
-green = "#A6DA95"
-magenta = "#F5BDE6"
-red = "#ED8796"
-white = "#B8C0E0"
-yellow = "#EED49F"
+  [colors.dim]
+  black   = "#494D64"
+  blue    = "#8AADF4"
+  cyan    = "#8BD5CA"
+  green   = "#A6DA95"
+  magenta = "#F5BDE6"
+  red     = "#ED8796"
+  white   = "#B8C0E0"
+  yellow  = "#EED49F"
 
-[colors.hints.end]
-background = "#A5ADCB"
-foreground = "#24273A"
+  [colors.hints.end]
+  background = "#A5ADCB"
+  foreground = "#24273A"
 
-[colors.hints.start]
-background = "#EED49F"
-foreground = "#24273A"
+  [colors.hints.start]
+  background = "#EED49F"
+  foreground = "#24273A"
 
-[colors.normal]
-black = "#494D64"
-blue = "#8AADF4"
-cyan = "#8BD5CA"
-green = "#A6DA95"
-magenta = "#F5BDE6"
-red = "#ED8796"
-white = "#B8C0E0"
-yellow = "#EED49F"
+  [colors.normal]
+  black   = "#494D64"
+  blue    = "#8AADF4"
+  cyan    = "#8BD5CA"
+  green   = "#A6DA95"
+  magenta = "#F5BDE6"
+  red     = "#ED8796"
+  white   = "#B8C0E0"
+  yellow  = "#EED49F"
 
-[colors.primary]
-background = "#24273A"
-bright_foreground = "#CAD3F5"
-dim_foreground = "#CAD3F5"
-foreground = "#CAD3F5"
+  [colors.primary]
+  background        = "#24273A"
+  bright_foreground = "#CAD3F5"
+  dim_foreground    = "#CAD3F5"
+  foreground        = "#CAD3F5"
 
-[colors.search.focused_match]
-background = "#A6DA95"
-foreground = "#24273A"
+  [colors.search.focused_match]
+  background = "#A6DA95"
+  foreground = "#24273A"
 
-[colors.search.matches]
-background = "#A5ADCB"
-foreground = "#24273A"
+  [colors.search.matches]
+  background = "#A5ADCB"
+  foreground = "#24273A"
 
-[colors.selection]
-background = "#F4DBD6"
-text = "#24273A"
+  [colors.selection]
+  background = "#F4DBD6"
+  text       = "#24273A"
 
-[colors.vi_mode_cursor]
-cursor = "#B7BDF8"
-text = "#24273A"
+  [colors.vi_mode_cursor]
+  cursor = "#B7BDF8"
+  text   = "#24273A"
 
 [cursor]
-blink_interval = 500
-thickness = 0.15
+blink_interval   = 500
+thickness        = 0.15
 unfocused_hollow = true
 
-[cursor.style]
-blinking = "Always"
-shape = "Beam"
+  [cursor.style]
+  blinking = "Always"
+  shape    = "Beam"
 
-[cursor.vi_mode_style]
-shape = "Block"
+  [cursor.vi_mode_style]
+  shape = "Block"
 
 [env]
 TERM = "xterm-256color"
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"
-style = "Regular"
+style  = "Regular"
 
 [[keyboard.bindings]]
 chars = "\u001BF"
-key = "Right"
-mods = "Alt"
+key   = "Right"
+mods  = "Alt"
 
 [[keyboard.bindings]]
 chars = "\u001BB"
-key = "Left"
-mods = "Alt"
+key   = "Left"
+mods  = "Alt"
 
 [terminal.shell]
-args = ["-l", "-c", "tmux attach -t base || tmux new -s base"]
+args = [
+  "-l",
+  "-c",
+  "tmux attach -t base || tmux new -s base",
+]
 program = "/bin/zsh"
 
 [window]
