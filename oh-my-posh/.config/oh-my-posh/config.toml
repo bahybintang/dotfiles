@@ -171,7 +171,7 @@ alignment = 'right'
 
   [[blocks.segments]]
   style      = 'plain'
-  template   = '☁️ {{ if .Env.AWS_SSO_ROLE_NAME }}{{ .Env.AWS_SSO_ROLE_NAME }}{{ end }}@{{ if .Env.AWS_SSO_ACCOUNT_ID }}{{ .Env.AWS_SSO_ACCOUNT_ID }}:{{ end }}{{ if .Region }}{{ .Region }}{{ end }} '
+  template   = '☁️ {{ if .Env.AWS_PROFILE }}{{ .Env.AWS_PROFILE }}{{ end }}{{ if .Env.AWS_SSO_ROLE_NAME }}{{ .Env.AWS_SSO_ROLE_NAME }}{{ end }}@{{ if .Env.AWS_SSO_ACCOUNT_ID }}{{ .Env.AWS_SSO_ACCOUNT_ID }}:{{ end }}{{ if .Region }}{{ .Region }}{{ end }} '
   foreground = 'p:orange'
   type       = 'aws'
 
