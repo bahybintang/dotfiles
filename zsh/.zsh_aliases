@@ -12,6 +12,7 @@ alias kg="kubectl get"
 alias kd="kubectl describe"
 alias ke="kubectl edit"
 alias kex="kubectl exec"
+alias kvsec="kubectl view-secret"
 alias tf="terraform"
 alias tg="terragrunt"
 alias dup="docker-compose up -d"
@@ -20,3 +21,5 @@ alias dstop="docker-compose stop"
 alias sso="aws-sso"
 alias copy='xclip -sel clip'
 alias code='TMUX="" code'
+alias awp='export AWS_PROFILE=$(aws configure list-profiles | fzf --prompt "Choose active AWS profile:")'
+
