@@ -11,26 +11,23 @@ clls() {
     wait
   )
 
-  arr=()
-  while IFS="\n" read -r line; do
-    arr+=("$line" "")
-  done <$TMP_FILE
-  cluster_select=$(dialog --keep-tite --title "Select EKS Cluster" --menu "Available EKS clusters:" 0 0 0 "${arr[@]}" 3>&1 1>&2 2>&3)
-
+  cluster_select=$(cat $TMP_FILE | fzf --prompt "Select EKS Cluster:")
   region=$(echo $cluster_select | awk -F '( - )' '{print $1}')
   cluster=$(echo $cluster_select | awk -F '( - )' '{print $2}')
   export AWS_REGION=$region
-  clset $cluster
-  echo "Selected $cluster in $region, now you can access the cluster!"
+  clset $cluster && echo "Selected $cluster in $region, now you can access the cluster!"
 
   [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
 
 clset() {
+  if [ -z "$1" ]; then
+    echo "Usage: clset <cluster-name>"
+    return 1
+  fi
   export KUBECONFIG="$HOME/.kube/$1"
   touch $KUBECONFIG
-  chmod 600 $KUBECONFIG
-  aws eks update-kubeconfig --name $1
+  aws eks update-kubeconfig --name $1 && chmod 600 $KUBECONFIG
 }
 
 kdebug() {
