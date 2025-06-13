@@ -14,8 +14,16 @@ clls() {
   cluster_select=$(cat $TMP_FILE | fzf --prompt "Select EKS Cluster:")
   region=$(echo $cluster_select | awk -F '( - )' '{print $1}')
   cluster=$(echo $cluster_select | awk -F '( - )' '{print $2}')
+
   export AWS_REGION=$region
-  (clset $cluster && echo "Selected $cluster in $region, now you can access the cluster!") || unset AWS_REGION
+  clset $cluster
+
+  if [ $? -ne 0 ]; then
+    echo "Failed to set kubeconfig for cluster $cluster in region $region."
+    unset AWS_REGION
+  else
+    echo "Selected $cluster in $region, now you can access the cluster!"
+  fi
 
   [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
