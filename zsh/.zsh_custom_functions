@@ -15,7 +15,7 @@ clls() {
   region=$(echo $cluster_select | awk -F '( - )' '{print $1}')
   cluster=$(echo $cluster_select | awk -F '( - )' '{print $2}')
   export AWS_REGION=$region
-  clset $cluster && echo "Selected $cluster in $region, now you can access the cluster!"
+  (clset $cluster && echo "Selected $cluster in $region, now you can access the cluster!") || unset AWS_REGION
 
   [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
