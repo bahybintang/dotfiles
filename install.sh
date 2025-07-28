@@ -43,7 +43,10 @@ install_deps_and_easy_package() {
   #   curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
   #   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
   # fi
-  if is_macos || is_linux ; then
+  if is_linux; then
+    sudo apt install build-essential procps curl file git
+  fi
+  if is_macos || is_linux; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install git stow zsh vim rust gvm fnm pyenv eza python3 ncurses libevent bat ripgrep gsed
   fi
