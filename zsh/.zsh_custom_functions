@@ -119,7 +119,7 @@ sap() {
 
   if [ $? -ne 0 ]; then
     echo "Failed to authenticate SAML2AWS"
-    exit 1
+    return 1
   fi
 
   export AWS_PROFILE=$(echo $choice | awk '{print $1}')
