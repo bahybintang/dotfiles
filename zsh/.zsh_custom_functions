@@ -112,3 +112,18 @@ get_aws_federated_url() {
   # Output the URL as a clickable hyperlink
   echo -e "${federated_url}"
 }
+
+sap() {
+  choice=$(awk -F' *= *' '/^aws_profile/{p=$2} /^region/{print p " - " $2}' ~/.saml2aws | fzf --prompt "Choose SAML2AWS profile:")
+  saml2aws login -a "$(echo $choice | awk '{print $1}')"
+
+  if [ $? -ne 0 ]; then
+    echo "Failed to authenticate SAML2AWS"
+    exit 1
+  fi
+
+  export AWS_PROFILE=$(echo $choice | awk '{print $1}')
+  export AWS_REGION=$(echo $choice | awk '{print $3}')
+
+  echo "Successfully set SAML2AWS profile $AWS_PROFILE in $AWS_REGION"
+}
