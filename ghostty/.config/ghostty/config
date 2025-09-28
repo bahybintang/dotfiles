@@ -2,6 +2,6 @@ shell-integration = "zsh"
 command = zsh -l -c "tmux attach -t base || tmux new -s base"
 font-family = "JetBrainsMono Nerd Font"
 background-opacity = 0.80
-theme = "catppuccin-mocha"
+theme = Catppuccin Mocha
 cursor-style = "bar"
 keybind = global:cmd+shift+space=toggle_quick_terminal
