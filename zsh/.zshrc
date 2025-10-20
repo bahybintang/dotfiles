@@ -67,13 +67,14 @@ zstyle ':completion:*:descriptions' format '[%d]'
 
 # fzf configs
 # Check if in tmux
-if [ -n "$TMUX" ]; then
-  export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border'
-  zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-else
-  export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
-fi
-zstyle ':fzf-tab:*' popup-min-size 60 12
+# if [ -n "$TMUX" ]; then
+  # export FZF_DEFAULT_OPTS='--height 40% --tmux center,40% --layout reverse --border'
+  # zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# else
+  # export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
+# fi
+# zstyle ':fzf-tab:*' popup-min-size 60 12
+export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
