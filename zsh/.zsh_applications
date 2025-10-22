@@ -48,3 +48,6 @@ _sgpt_zsh() {
 
 # PYEnv
 [ $(command -v pyenv) ] && eval "$(pyenv init -)"
+
+# Podman
+[ $(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}') ] && export DOCKER_HOST=unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')
