@@ -1,17 +1,20 @@
 # OS specific exports
 if [[ $(uname) == "Darwin" ]]; then
   export GOROOT="$(brew --prefix golang)/libexec"
-elif [[ $(uname) == "Linux" && -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
+fi
+
+if [[ $(uname) == "Linux" && -f "/home/linuxbrew/.linuxbrew/bin/brew" ]]; then
   eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+fi
+
+if [[ $(uname) == "Darwin" ]]; then
+  export PATH="/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
 fi
 
 # Application specific exports
 export GEM_HOME="$HOME/gems"
 export GOPATH="$HOME/go"
 export DENO_INSTALL="$HOME/.deno"
-export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/cuda-11.2/lib64:/usr/local/cuda-11.2/extras/CUPTI/lib64:$LD_LIBRARY_PATH
-export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins
-export JAVA_HOME=/usr/lib/jvm/bellsoft-java8-full-amd64
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export VISUAL="nvim"
 export EDITOR="$VISUAL"
@@ -22,11 +25,8 @@ export PATH="$HOME/gems/bin:$PATH"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export PATH="$DENO_INSTALL/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="/usr/local/cuda-11.2/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$HOME/Library/Python/3.8/bin:$PATH"
 export PATH="$HOME/.nvm:$PATH"
-export PATH="/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH"
 export PATH=$HOME/.config/composer/vendor/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
 export PATH=$HOME/.codon/bin:$PATH
@@ -34,4 +34,5 @@ export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$HOME/.tfenv/bin:$PATH
 export PATH=$HOME/.tgenv/bin:$PATH
 export PATH=$HOME/.lmstudio/bin:$PATH
+export PATH=$HOME/.antigravity/antigravity/bin:$PATH
 export SHELL=$(which zsh)

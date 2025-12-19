@@ -16,3 +16,5 @@
 [alias]
 	exec = "!exec "
 	root = rev-parse --show-toplevel
+[core]
+	compression = 0

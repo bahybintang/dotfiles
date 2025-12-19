@@ -22,4 +22,4 @@ alias sso="aws-sso"
 alias copy='xclip -sel clip'
 alias code='TMUX="" code'
 alias awp='export AWS_PROFILE=$(aws configure list-profiles | fzf --prompt "Choose active AWS profile:")'
-
+alias kb="kubectl neat | bat -l"
