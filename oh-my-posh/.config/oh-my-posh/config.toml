@@ -164,7 +164,7 @@ alignment = 'right'
 
   [[blocks.segments]]
   style      = 'plain'
-  template   = ' ⎈ {{ (split "/" .Cluster)._1 }}{{ if .Namespace }} :: {{ .Namespace }}{{ end }} '
+  template   = ' ⎈ {{ .Context }}{{ if .Namespace }} :: {{ .Namespace }}{{ end }} '
   foreground = 'p:blue'
   type       = 'kubectl'
   alias      = 'k8s'
