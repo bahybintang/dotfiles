@@ -1,41 +1,188 @@
 clls() {
+  KUBECONFIG_FILE="$HOME/.kube/config"
   TMP_FILE="/tmp/k8s-clusters-$(date +%s).tmp"
-  regions=($(aws account list-regions | jq -r '.Regions[].RegionName'))
+  
+  # Backup existing kubeconfig
+  if [ -f "$KUBECONFIG_FILE" ]; then
+    cp "$KUBECONFIG_FILE" "${KUBECONFIG_FILE}.backup-$(date +%s)"
+    # Keep only last 5 backups
+    ls -t "${KUBECONFIG_FILE}.backup-"* 2>/dev/null | tail -n +6 | xargs -r rm
+  fi
+  
+  # Get AWS account information
+  account_id=$(aws sts get-caller-identity --query Account --output text)
+  account_alias=$(aws iam list-account-aliases --query 'AccountAliases[0]' --output text 2>/dev/null)
+  aws_profile=${AWS_PROFILE:-}
+  
+  # Determine prefix: alias > profile > account_id
+  if [ -n "$account_alias" ] && [ "$account_alias" != "None" ]; then
+    prefix="$account_alias"
+  elif [ -n "$aws_profile" ]; then
+    prefix="$aws_profile"
+  else
+    prefix="$account_id"
+  fi
+  
+  echo "Using prefix: $prefix"
+  echo "Discovering EKS clusters across all regions..."
+  
+  regions=($(aws account list-regions 2>/dev/null | jq -r '.Regions[].RegionName'))
+  
+  # If account list-regions fails, fall back to ec2 describe-regions
+  if [ ${#regions[@]} -eq 0 ]; then
+    regions=($(aws ec2 describe-regions --query 'Regions[].RegionName' --output text))
+  fi
+  
   N=20
   (
     for region in "${regions[@]}"; do
       ((i = i % N))
       ((i++ == 0)) && wait
-      aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region - \1/g" >>$TMP_FILE &
+      aws eks list-clusters --region "$region" 2>/dev/null | jq -r '.clusters[]' | sed -Ee "s/(.*)/$region|\1/g" >>$TMP_FILE &
     done
     wait
   )
-
-  cluster_select=$(cat $TMP_FILE | fzf --prompt "Select EKS Cluster:")
-  region=$(echo $cluster_select | awk -F '( - )' '{print $1}')
-  cluster=$(echo $cluster_select | awk -F '( - )' '{print $2}')
-
-  export AWS_REGION=$region
-  clset $cluster
-
-  if [ $? -ne 0 ]; then
-    echo "Failed to set kubeconfig for cluster $cluster in region $region."
-    unset AWS_REGION
-  else
-    echo "Selected $cluster in $region, now you can access the cluster!"
+  
+  # Ensure kubeconfig exists
+  if [ ! -f "$KUBECONFIG_FILE" ]; then
+    echo "apiVersion: v1" > "$KUBECONFIG_FILE"
+    echo "kind: Config" >> "$KUBECONFIG_FILE"
+    echo "clusters: []" >> "$KUBECONFIG_FILE"
+    echo "contexts: []" >> "$KUBECONFIG_FILE"
+    echo "users: []" >> "$KUBECONFIG_FILE"
+    echo "current-context: ''" >> "$KUBECONFIG_FILE"
   fi
-
+  
+  export KUBECONFIG="$KUBECONFIG_FILE"
+  
+  # Get existing contexts for this prefix before update
+  existing_contexts=$(kubectl config get-contexts -o name 2>/dev/null | grep "^${prefix}-" || true)
+  
+  # Update/add kubeconfig for each discovered cluster
+  cluster_count=0
+  updated_count=0
+  added_count=0
+  
+  while IFS='|' read -r region cluster; do
+    if [ -n "$cluster" ]; then
+      context_name="${prefix} | ${region} | ${cluster}"
+      
+      # Check if context already exists
+      if echo "$existing_contexts" | grep -q "^${context_name}$"; then
+        echo "Refreshing cluster: $cluster (region: $region)"
+        ((updated_count++))
+      else
+        echo "Adding new cluster: $cluster (region: $region)"
+        ((added_count++))
+      fi
+      
+      aws eks update-kubeconfig \
+        --name "$cluster" \
+        --region "$region" \
+        --alias "$context_name" \
+        --kubeconfig "$KUBECONFIG_FILE" 2>/dev/null
+      
+      if [ $? -eq 0 ]; then
+        ((cluster_count++))
+      else
+        echo "  ⚠ Failed to update kubeconfig for $cluster in $region"
+      fi
+    fi
+  done < "$TMP_FILE"
+  
+  chmod 600 "$KUBECONFIG_FILE"
+  
+  echo ""
+  echo "✓ Successfully processed $cluster_count clusters for prefix: $prefix"
+  echo "  - Added: $added_count new cluster(s)"
+  echo "  - Refreshed: $updated_count existing cluster(s)"
+  echo "✓ Kubeconfig saved to: $KUBECONFIG_FILE"
+  echo ""
+  echo "All contexts in kubeconfig:"
+  kubectl config get-contexts -o name | sed 's/^/  - /'
+  echo ""
+  echo "Contexts with prefix '$prefix':"
+  kubectl config get-contexts -o name | grep "^${prefix}-" | sed 's/^/  - /' || echo "  (none)"
+  echo ""
+  echo "Use 'kubectx' to switch between contexts"
+  
   [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
 
-clset() {
+cladd() {
   if [ -z "$1" ]; then
-    echo "Usage: clset <cluster-name>"
+    echo "Usage: cladd <kubeconfig-file>"
+    echo "Example: cladd test-kubeconfig"
     return 1
   fi
-  export KUBECONFIG="$HOME/.kube/$1"
-  touch $KUBECONFIG
-  aws eks update-kubeconfig --name $1 && chmod 600 $KUBECONFIG
+  
+  SOURCE_KUBECONFIG="$1"
+  TARGET_KUBECONFIG="$HOME/.kube/config"
+  
+  # Check if source kubeconfig exists
+  if [ ! -f "$SOURCE_KUBECONFIG" ]; then
+    echo "Error: Kubeconfig file '$SOURCE_KUBECONFIG' not found"
+    return 1
+  fi
+  
+  # Validate source kubeconfig is valid YAML
+  if ! kubectl --kubeconfig="$SOURCE_KUBECONFIG" config view &>/dev/null; then
+    echo "Error: '$SOURCE_KUBECONFIG' is not a valid kubeconfig file"
+    return 1
+  fi
+  
+  # Backup existing kubeconfig
+  if [ -f "$TARGET_KUBECONFIG" ]; then
+    cp "$TARGET_KUBECONFIG" "${TARGET_KUBECONFIG}.backup-$(date +%s)"
+    # Keep only last 5 backups
+    ls -t "${TARGET_KUBECONFIG}.backup-"* 2>/dev/null | tail -n +6 | xargs -r rm
+    echo "✓ Backed up existing kubeconfig"
+  fi
+  
+  # Create target kubeconfig if it doesn't exist
+  if [ ! -f "$TARGET_KUBECONFIG" ]; then
+    mkdir -p "$(dirname "$TARGET_KUBECONFIG")"
+    echo "apiVersion: v1" > "$TARGET_KUBECONFIG"
+    echo "kind: Config" >> "$TARGET_KUBECONFIG"
+    echo "clusters: []" >> "$TARGET_KUBECONFIG"
+    echo "contexts: []" >> "$TARGET_KUBECONFIG"
+    echo "users: []" >> "$TARGET_KUBECONFIG"
+    echo "current-context: ''" >> "$TARGET_KUBECONFIG"
+    echo "✓ Created new kubeconfig at $TARGET_KUBECONFIG"
+  fi
+  
+  # Get contexts from source kubeconfig
+  source_contexts=$(kubectl --kubeconfig="$SOURCE_KUBECONFIG" config get-contexts -o name 2>/dev/null)
+  
+  if [ -z "$source_contexts" ]; then
+    echo "Warning: No contexts found in '$SOURCE_KUBECONFIG'"
+    return 1
+  fi
+  
+  echo "Found contexts in source kubeconfig:"
+  echo "$source_contexts" | sed 's/^/  - /'
+  echo ""
+  
+  # Merge kubeconfigs
+  echo "Merging kubeconfig files..."
+  KUBECONFIG="$TARGET_KUBECONFIG:$SOURCE_KUBECONFIG" kubectl config view --flatten > "${TARGET_KUBECONFIG}.tmp"
+  
+  if [ $? -eq 0 ]; then
+    mv "${TARGET_KUBECONFIG}.tmp" "$TARGET_KUBECONFIG"
+    chmod 600 "$TARGET_KUBECONFIG"
+    echo "✓ Successfully merged kubeconfig"
+  else
+    rm -f "${TARGET_KUBECONFIG}.tmp"
+    echo "Error: Failed to merge kubeconfig files"
+    return 1
+  fi
+  
+  # Show summary
+  echo ""
+  echo "All contexts now in $TARGET_KUBECONFIG:"
+  kubectl config get-contexts -o name | sed 's/^/  - /'
+  echo ""
+  echo "Use 'kubectx' to switch between contexts"
 }
 
 kdebug() {
