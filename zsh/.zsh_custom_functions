@@ -56,7 +56,7 @@ clls() {
   export KUBECONFIG="$KUBECONFIG_FILE"
   
   # Get existing contexts for this prefix before update
-  existing_contexts=$(kubectl config get-contexts -o name 2>/dev/null | grep "^${prefix}-" || true)
+  existing_contexts=$(kubectl config get-contexts -o name 2>/dev/null | grep "^${prefix} | " || true)
   
   # Update/add kubeconfig for each discovered cluster
   cluster_count=0
@@ -68,7 +68,7 @@ clls() {
       context_name="${prefix} | ${region} | ${cluster}"
       
       # Check if context already exists
-      if echo "$existing_contexts" | grep -q "^${context_name}$"; then
+      if echo "$existing_contexts" | grep -qF "${context_name}"; then
         echo "Refreshing cluster: $cluster (region: $region)"
         ((updated_count++))
       else
@@ -102,7 +102,7 @@ clls() {
   kubectl config get-contexts -o name | sed 's/^/  - /'
   echo ""
   echo "Contexts with prefix '$prefix':"
-  kubectl config get-contexts -o name | grep "^${prefix}-" | sed 's/^/  - /' || echo "  (none)"
+  kubectl config get-contexts -o name | grep "^${prefix} | " | sed 's/^/  - /' || echo "  (none)"
   echo ""
   echo "Use 'kubectx' to switch between contexts"
   
