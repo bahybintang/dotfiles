@@ -57,5 +57,6 @@ if [ $(command -v switcher) ]; then
   source <(switcher init zsh)
   alias s=switch
   source <(switch completion zsh)
-  s unset-context
+  switch . &>/dev/null
+  switch unset-context &>/dev/null
 fi
