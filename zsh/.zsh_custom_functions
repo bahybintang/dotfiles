@@ -104,7 +104,7 @@ clls() {
   echo "Contexts with prefix '$prefix':"
   kubectl config get-contexts -o name | grep "^${prefix} | " | sed 's/^/  - /' || echo "  (none)"
   echo ""
-  echo "Use 'kubectx' to switch between contexts"
+  echo "Use 'kubeswitch' to switch between contexts"
   
   [[ ! -e $TMP_FILE ]] || rm $TMP_FILE
 }
@@ -182,7 +182,7 @@ cladd() {
   echo "All contexts now in $TARGET_KUBECONFIG:"
   kubectl config get-contexts -o name | sed 's/^/  - /'
   echo ""
-  echo "Use 'kubectx' to switch between contexts"
+  echo "Use 'kubeswitch' to switch between contexts"
 }
 
 kdebug() {
