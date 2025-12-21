@@ -53,7 +53,9 @@ _sgpt_zsh() {
 [ $(command -v podman) ] && [ $(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}') ] && export DOCKER_HOST=unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')
 
 # kubeswitch
-source <(switcher init zsh)
-alias s=switch
-source <(switch completion zsh)
-s unset-context
+if [ $(command -v switcher) ]; then
+  source <(switcher init zsh)
+  alias s=switch
+  source <(switch completion zsh)
+  s unset-context
+fi
