@@ -60,3 +60,6 @@ if [ $(command -v switcher) ]; then
   switch . &>/dev/null
   switch unset-context &>/dev/null
 fi
+
+# Kiro
+[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
