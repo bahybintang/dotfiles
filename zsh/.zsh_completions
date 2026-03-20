@@ -39,12 +39,25 @@ complete -C /usr/local/bin/aws-sso aws-sso
 complete -C $(which aws_completer) aws
 # END_AWS_CLI
 
+# Cached completion loader — sources from cache, regenerates in background if older than 7 days
+_load_cached_completion() {
+  local name=$1; shift
+  local cache="$HOME/.zsh_cache/${name}.zsh"
+  mkdir -p "$HOME/.zsh_cache"
+  if [[ ! -f "$cache" ]]; then
+    "$@" >| "$cache" 2>/dev/null
+  elif (( $(date +%s) - $(stat -f %m "$cache") > 604800 )); then
+    "$@" >| "$cache" 2>/dev/null &!
+  fi
+  [[ -r "$cache" ]] && source "$cache"
+}
+
 # BEGIN_FLUX_CLI
-[ $(command -v flux) ] >/dev/null && . <(flux completion zsh)
+[ $(command -v flux) ] >/dev/null && _load_cached_completion flux flux completion zsh
 # END_FLUX_CLI
 
 # BEGIN_KUBECTL_COMPLETION
-[ $(command -v kubectl) ] && . <(kubectl completion zsh)
+[ $(command -v kubectl) ] && _load_cached_completion kubectl kubectl completion zsh
 # END_KUBECTL_COMPLETION
 
 # BEGIN_BASH_COMPLETION

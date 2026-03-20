@@ -43,18 +43,20 @@ _sgpt_zsh() {
 }
 [ $(command -v sgpt) ] && zle -N _sgpt_zsh && bindkey '^z' _sgpt_zsh
 
-# PYEnv
-[ $(command -v pyenv) ] && eval "$(pyenv init -)"
+# PYEnv (lazy load - shims work immediately, full init deferred to first pyenv call)
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+export PYENV_SHELL=zsh
+pyenv() { unfunction pyenv; eval "$(command pyenv init -)"; pyenv "$@"; }
 
 # Podman
 [ $(command -v podman) ] && [ $(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}') ] && export DOCKER_HOST=unix://$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')
 
 # kubeswitch
 if [ $(command -v switcher) ]; then
-  source <(switcher init zsh)
+  _load_cached_completion switcher-init switcher init zsh
   alias s=switch
-  source <(switch completion zsh)
-
+  _load_cached_completion switch-completion switch completion zsh
 fi
 
 # Kiro
