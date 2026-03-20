@@ -1,13 +1,3 @@
-# BEGIN_COMPINIT
-autoload -Uz compinit
-compinit -C # Use cache to reduce startup time by ~0.1s
-# Have another thread refresh the cache in the background (subshell to hide output)
-(
-  autoload -Uz compinit
-  compinit &
-)
-# END_COMPINIT
-
 # BEGIN_AWS_SSO_CLI
 __aws_sso_profile_complete() {
   COMPREPLY=()
