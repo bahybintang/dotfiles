@@ -4,10 +4,9 @@ if [ -f "$HOME/.gcloud/path.zsh.inc" ]; then . "$HOME/.gcloud/path.zsh.inc"; fi
 # The next line enables shell command completion for gcloud.
 if [ -f "$HOME/.gcloud/completion.zsh.inc" ]; then . "$HOME/.gcloud/completion.zsh.inc"; fi
 
-# NVM
+# NVM (lazy load)
 export NVM_DIR="$HOME/.nvm"
-[ -r "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-alias nvm="unalias nvm; nvm $@"
+nvm() { unalias nvm 2>/dev/null; source "$NVM_DIR/nvm.sh"; nvm "$@"; }
 
 # FZF
 [ -r ~/.fzf.zsh ] && . ~/.fzf.zsh
@@ -30,8 +29,6 @@ export TFENV_AUTO_INSTALL=true
 
 # GVM
 export GVM_DIR="$HOME/.gvm"
-SED_CMD=$(case "$OSTYPE" in darwin*) echo "gsed" ;; *) echo "sed" ;; esac)
-[ -r "$GVM_DIR/scripts/gvm" ] && $SED_CMD -i 's/(\. "$GVM_ROOT\/scripts\/env\/cd" && cd \.)/# $1/i' $GVM_DIR/scripts/gvm-default # Remove cd command from gvm-default
 [ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"
 
 # Shell-GPT
@@ -57,8 +54,7 @@ if [ $(command -v switcher) ]; then
   source <(switcher init zsh)
   alias s=switch
   source <(switch completion zsh)
-  switch . &>/dev/null
-  switch unset-context &>/dev/null
+
 fi
 
 # Kiro
