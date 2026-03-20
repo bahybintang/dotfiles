@@ -103,12 +103,16 @@ key   = "Left"
 mods  = "Alt"
 
 [terminal.shell]
+# Use /bin/sh to find the correct zsh in PATH (works on macOS and Linux)
+program = "/bin/sh"
 args = [
-  "-l",
   "-c",
-  "tmux attach -t base || tmux new -s base",
+  "exec \"$(command -v zsh)\" -l -c 'tmux attach -t base || tmux new -s base'",
 ]
-program = "/bin/zsh"
+
+[scrolling]
+# Disable scrollback — tmux handles it
+history = 0
 
 [window]
 # decorations = "transparent"

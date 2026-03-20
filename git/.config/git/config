@@ -16,5 +16,14 @@
 [alias]
 	exec = "!exec "
 	root = rev-parse --show-toplevel
+	lg = log --oneline --graph --decorate --all
 [core]
-	compression = 0
+	autocrlf = input
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main

@@ -53,6 +53,10 @@ install_deps_and_easy_package() {
 }
 
 install_tmux() {
+  if command -v tmux >/dev/null 2>&1; then
+    echo "tmux already installed, skipping..."
+    return
+  fi
   if is_linux; then
     curl -LO https://github.com/tmux/tmux/releases/download/3.4/tmux-3.4.tar.gz
     tar xzf tmux-3.4.tar.gz
@@ -68,11 +72,14 @@ install_tmux() {
 }
 
 install_zsh() {
-  echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-  git clone https://github.com/joshskidmore/zsh-fzf-history-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
-  git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "y" | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  fi
+  local plugins_dir="${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins"
+  [ ! -d "$plugins_dir/zsh-autosuggestions" ]    && git clone https://github.com/zsh-users/zsh-autosuggestions "$plugins_dir/zsh-autosuggestions"
+  [ ! -d "$plugins_dir/zsh-syntax-highlighting" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting "$plugins_dir/zsh-syntax-highlighting"
+  [ ! -d "$plugins_dir/zsh-fzf-history-search" ]  && git clone https://github.com/joshskidmore/zsh-fzf-history-search "$plugins_dir/zsh-fzf-history-search"
+  [ ! -d "$plugins_dir/fzf-tab" ]                 && git clone https://github.com/Aloxaf/fzf-tab "$plugins_dir/fzf-tab"
 
   if is_linux; then
     curl -s https://ohmyposh.dev/install.sh | sudo bash -s -- -d /usr/local/bin
@@ -83,8 +90,13 @@ install_zsh() {
 }
 
 install_neovim() {
+  if command -v nvim >/dev/null 2>&1; then
+    echo "neovim already installed, skipping..."
+    return
+  fi
   if is_linux; then
-    curl -LO https://github.com/neovim/neovim/releases/download/v0.10.1/nvim-linux64.tar.gz
+    local nvim_version="v0.10.1"
+    curl -LO "https://github.com/neovim/neovim/releases/download/${nvim_version}/nvim-linux64.tar.gz"
     tar xzf nvim-linux64.tar.gz
     sudo cp nvim-linux64/bin/nvim /usr/bin
     sudo cp -r nvim-linux64/share/nvim /usr/share
@@ -97,6 +109,10 @@ install_neovim() {
 }
 
 install_fzf() {
+  if command -v fzf >/dev/null 2>&1; then
+    echo "fzf already installed, skipping..."
+    return
+  fi
   if is_linux; then
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     echo "y y n" | ~/.fzf/install
@@ -136,7 +152,7 @@ install_docker() {
 }
 
 link_dotfiles() {
-  if is_linux; then
+  if is_linux || is_macos; then
     stow --adopt */
     git reset --hard
   fi
