@@ -26,9 +26,9 @@ clls() {
   echo "Using prefix: $prefix"
   echo "Discovering EKS clusters across all regions..."
   
-  regions=($(aws account list-regions 2>/dev/null | jq -r '.Regions[].RegionName'))
-  
-  # If account list-regions fails, fall back to ec2 describe-regions
+  regions=($(aws account list-regions 2>/dev/null | jq -r '.Regions[] | select(.RegionOptStatus != "DISABLED") | .RegionName'))
+
+  # If account list-regions fails, fall back to ec2 describe-regions (returns only enabled regions by default)
   if [ ${#regions[@]} -eq 0 ]; then
     regions=($(aws ec2 describe-regions --query 'Regions[].RegionName' --output text))
   fi
