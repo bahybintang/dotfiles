@@ -81,7 +81,7 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 export FZF_CTRL_R_OPTS="--reverse"
 
 # IBeam cursor
-printf '\e[5 q' > $(tty)
+[[ -t 1 ]] && printf '\e[5 q'
 
 # p10k
 # [ -r $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ] && . $ZSH/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
