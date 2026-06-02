@@ -54,7 +54,13 @@ pyenv() { unfunction pyenv; eval "$(command pyenv init -)"; pyenv "$@"; }
 
 # kubeswitch
 if [ $(command -v switcher) ]; then
-  _load_cached_completion switcher-init switcher init zsh
+  # regenerate synchronously if cache is missing OR older than the switcher binary
+  # (avoids the >7-day background-regen path leaving the current shell one version behind)
+  if [[ ! -f ~/.zsh_cache/switcher-init.zsh \
+        || $(command -v switcher) -nt ~/.zsh_cache/switcher-init.zsh ]]; then
+    switcher init zsh >| ~/.zsh_cache/switcher-init.zsh 2>/dev/null
+  fi
+  source ~/.zsh_cache/switcher-init.zsh
   alias s=switch
   _load_cached_completion switch-completion switch completion zsh
 fi
