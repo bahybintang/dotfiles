@@ -108,3 +108,9 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 
 # oh-my-posh
 eval "$(oh-my-posh init zsh --config $HOME/.config/oh-my-posh/config.toml)"
+
+# Keep cswap auto-switching alive in a detached tmux session. Not launchd:
+# a launchd agent can't read the Keychain credential cswap needs to switch.
+if (( $+commands[cswap] && $+commands[tmux] )) && ! tmux has-session -t '=cswap-auto' 2>/dev/null; then
+  tmux new-session -d -s cswap-auto "while true; do ${commands[cswap]} auto; sleep 10; done"
+fi
