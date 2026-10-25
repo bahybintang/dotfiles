@@ -46,7 +46,7 @@ _load_cached_completion() {
   mkdir -p "$HOME/.zsh_cache"
   if [[ ! -f "$cache" ]]; then
     "$@" >| "$cache" 2>/dev/null
-  elif (( $(date +%s) - $(stat -f %m "$cache") > 604800 )); then
+  elif (( $(date +%s) - $([[ $OSTYPE == darwin* ]] && stat -f %m "$cache" || stat -c %Y "$cache") > 604800 )); then
     "$@" >| "$cache" 2>/dev/null &!
   fi
   [[ -r "$cache" ]] && source "$cache"
