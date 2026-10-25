@@ -43,10 +43,11 @@ complete -C $(which aws_completer) aws
 _load_cached_completion() {
   local name=$1; shift
   local cache="$HOME/.zsh_cache/${name}.zsh"
-  mkdir -p "$HOME/.zsh_cache"
+  local -a stale=( $cache(Nmh+168) )  # glob qualifier: older than 7 days, without forking date/stat
+  [[ -d "$HOME/.zsh_cache" ]] || mkdir -p "$HOME/.zsh_cache"
   if [[ ! -f "$cache" ]]; then
     "$@" >| "$cache" 2>/dev/null
-  elif (( $(date +%s) - $([[ $OSTYPE == darwin* ]] && stat -f %m "$cache" || stat -c %Y "$cache") > 604800 )); then
+  elif (( $#stale )); then
     "$@" >| "$cache" 2>/dev/null &!
   fi
   [[ -r "$cache" ]] && source "$cache"

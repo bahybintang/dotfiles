@@ -27,9 +27,12 @@ export TGENV_AUTO_INSTALL=true
 # TFENV
 export TFENV_AUTO_INSTALL=true
 
-# GVM
+# GVM (lazy load - default Go env applies immediately, full init deferred to first gvm call)
 export GVM_DIR="$HOME/.gvm"
-[ -r "$GVM_DIR/scripts/gvm" ] && . "$GVM_DIR/scripts/gvm"
+if [ -r "$GVM_DIR/scripts/gvm" ]; then
+  [ -r "$GVM_DIR/environments/default" ] && . "$GVM_DIR/environments/default"
+  gvm() { unfunction gvm; . "$GVM_DIR/scripts/gvm"; gvm "$@"; }
+fi
 
 # Shell-GPT
 _sgpt_zsh() {
