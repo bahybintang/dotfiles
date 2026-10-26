@@ -90,6 +90,8 @@ clls() {
     fi
   done < "$TMP_FILE"
   
+  # update-kubeconfig makes the last cluster current; keep new shells on no context
+  kubectl config unset current-context --kubeconfig "$KUBECONFIG_FILE" >/dev/null
   chmod 600 "$KUBECONFIG_FILE"
   
   echo ""
@@ -169,6 +171,8 @@ cladd() {
   
   if [ $? -eq 0 ]; then
     mv "${TARGET_KUBECONFIG}.tmp" "$TARGET_KUBECONFIG"
+    # the merge can inherit the source's current-context; keep new shells on no context
+    kubectl config unset current-context --kubeconfig "$TARGET_KUBECONFIG" >/dev/null
     chmod 600 "$TARGET_KUBECONFIG"
     echo "✓ Successfully merged kubeconfig"
   else
