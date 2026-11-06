@@ -96,7 +96,7 @@ install_core() {
 # ── CLI Tools ──────────────────────────────────────────────────────────────────
 install_cli_tools() {
   header "CLI Tools"
-  for p in fzf eza bat ripgrep zoxide; do pkg "$p"; done
+  for p in fzf eza bat ripgrep zoxide hwatch; do pkg "$p"; done
 }
 
 # ── Shell ──────────────────────────────────────────────────────────────────────

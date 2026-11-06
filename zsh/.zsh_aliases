@@ -24,3 +24,4 @@ alias code='TMUX="" code'
 alias awp='export AWS_PROFILE=$(aws configure list-profiles | fzf --prompt "Choose active AWS profile:")'
 alias kb="kubectl neat | bat -l"
 alias krr="kubectl rollout restart"
+alias watch="hwatch"
